@@ -1,4 +1,4 @@
-# Set Windows Display Resolution Command Line Tool
+# Set Windows Display Resolution from Command Line
 
 This small command line utility allows you to quickly set Windows Display Resolutions. 
 
