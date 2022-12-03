@@ -66,5 +66,8 @@ SetResolution CREATEPROFILE -p <profileName> -w 1280 -h 768 -f 59
 
 Profiles are stored in `SetResolution.xml` in the same folder as the .exe. To remove profiles you can edit the `SetResolution.xml` file.
 
+## Credits
+The hard work of this tool is in the Win32 interfaces to retrieve and set display settings. All of that code is based on this article on C# Corner by [Mohammad Elseheimy](https://www.c-sharpcorner.com/members/mohammad-elsheimy):
 
-
+* [Changing Display Settings Programmatically
+](https://www.c-sharpcorner.com/uploadfile/GemingLeader/changing-display-settings-programmatically/)
