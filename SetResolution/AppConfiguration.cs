@@ -38,6 +38,22 @@ namespace Westwind.SetResolution
                     Frequency = 60,
                     BitSize = 32
                 });
+                Current.Profiles.Add(new DisplayProfile()
+                {
+                    Name = "1440",
+                    Width = 2560,
+                    Height = 1440,
+                    Frequency = 60,
+                    BitSize = 32
+                });
+                Current.Profiles.Add(new DisplayProfile()
+                {
+                    Name = "720",
+                    Width = 1280,
+                    Height = 720,
+                    Frequency = 60,
+                    BitSize = 32
+                });
             }
         }
 

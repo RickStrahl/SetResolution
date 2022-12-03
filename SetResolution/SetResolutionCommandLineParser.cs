@@ -13,9 +13,9 @@ namespace Westwind.SetResolution
 
         public int Frequency { get; set; } = 60;
         
-        public int BitSize { get; set; } = 32;
+        public int BitCount { get; set; } = 32;
 
-        public int Orientation { get; set; } = 0;
+        public Orientation Orientation { get; set; } = 0;
 
         public string Profile { get; set;  }
 
@@ -26,7 +26,8 @@ namespace Westwind.SetResolution
         
         public bool CreateProfile { get; set; }
         public bool ShowResolutions { get; set; }
-        
+        public bool ListAll { get; set; }
+
 
         public SetResolutionCommandLineParser(string[] args = null, string cmdLine = null)
             : base(args, cmdLine)
@@ -38,8 +39,10 @@ namespace Westwind.SetResolution
             Width = ParseIntParameterSwitch("-w", 0);
             Height = ParseIntParameterSwitch("-h", 0);
             Frequency = ParseIntParameterSwitch("-f", 60);
-            BitSize = ParseIntParameterSwitch("-b", 32);
-            Orientation = ParseIntParameterSwitch("-o", 0);
+            BitCount = ParseIntParameterSwitch("-b", 32);
+            int or = ParseIntParameterSwitch("-o", 0);
+            Orientation = (Orientation) or;
+            ListAll = ParseParameterSwitch("-la");
 
             Profile = ParseStringParameterSwitch("-p");
 

@@ -14,8 +14,6 @@ namespace Westwind.SetResolution
         static void Main(string[] args)
         {
             StartupPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-            Console.WriteLine(StartupPath);
-
             AppConfiguration.Load();
 
             var cmdLine = new SetResolutionCommandLineParser();
@@ -62,11 +60,12 @@ Display Settings:
 -f                  Display Frequency in Hertz (60*)
 -o                  Orientation - 0 (default*), 1 (90deg), 2 (180deg), 3 (270deg)
 -p                  Profile name
+-la                 List all Display modes (LIST command). Default only shows current matches
 
 Examples:
 ---------
 SetResolution MyProfile
-SetResolution SET -p 1080    (a profile name)
+SetResolution SET -p MyProfile
 SetResolution SET -w 1920 -h 1080 -f 60
 SetResolution LIST 
 SetResolution PROFILES

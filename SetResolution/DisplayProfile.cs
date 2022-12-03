@@ -19,17 +19,15 @@ namespace Westwind.SetResolution
 
         public int BitSize { get; set; } = 32;
 
-        public int Orientation { get; set; } = 0;
+        public Orientation Orientation { get; set; } = 0;
 
         public void UpdateCommandLine(SetResolutionCommandLineParser cmd)
         {
-
             cmd.Width = Width;
             cmd.Height = Height;
             cmd.Frequency = Frequency;
-            cmd.BitSize = BitSize;
+            cmd.BitCount = BitSize;
             cmd.Orientation = Orientation;
-
         }
 
         public override string ToString()

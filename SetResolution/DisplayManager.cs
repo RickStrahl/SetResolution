@@ -78,6 +78,16 @@ namespace Westwind.SetResolution
 
 
         /// <summary>
+        /// Returns the current display mode setting
+        /// </summary>
+        /// <returns></returns>
+        public static DisplaySettings GetCurrentDisplaySetting()
+        {
+            var mode = GetDeviceMode();
+            return CreateDisplaySettingsObject(0, mode);
+        }
+
+        /// <summary>
         /// Returns a list of all the display settings
         /// </summary>
         /// <returns></returns>
@@ -114,8 +124,8 @@ namespace Westwind.SetResolution
                 set.Orientation--;
 
             if (set.Orientation < Orientation.Default)
-                set.Orientation = Orientation.Clockwise270;
-            else if (set.Orientation > Orientation.Clockwise270)
+                set.Orientation = Orientation.Rotate270;
+            else if (set.Orientation > Orientation.Rotate270)
                 set.Orientation = Orientation.Default;
 
             SetDisplaySettings(set);
@@ -148,7 +158,7 @@ namespace Westwind.SetResolution
         /// </remarks>
         private static SafeNativeMethods.DEVMODE GetDeviceMode()
         {
-            SafeNativeMethods.DEVMODE mode = new SafeNativeMethods.DEVMODE();
+            var mode = new SafeNativeMethods.DEVMODE();
 
             mode.Initialize();
 
@@ -162,9 +172,9 @@ namespace Westwind.SetResolution
         {
             int err = Marshal.GetLastWin32Error();
 
-            string msg;
-
-            if (SafeNativeMethods.FormatMessage(SafeNativeMethods.FORMAT_MESSAGE_FLAGS, SafeNativeMethods.FORMAT_MESSAGE_FROM_HMODULE, (uint)err, 0, out msg, 0, 0) == 0)
+            if (SafeNativeMethods.FormatMessage(SafeNativeMethods.FORMAT_MESSAGE_FLAGS,
+                    SafeNativeMethods.FORMAT_MESSAGE_FROM_HMODULE,
+                    (uint)err, 0, out var msg, 0, 0) == 0)
                 return Properties.Resources.InvalidOperation_FatalError;
             else
                 return msg;
@@ -174,9 +184,9 @@ namespace Westwind.SetResolution
     public enum Orientation
     {
         Default = 0,
-        Clockwise90 = 1,
-        Clockwise180 = 2,
-        Clockwise270 = 3
+        Rotate90 = 1,
+        Rotate180 = 2,
+        Rotate270 = 3
     }
 
     public class DisplaySettings
@@ -191,8 +201,7 @@ namespace Westwind.SetResolution
         public override string ToString()
         {
             return string.Format(System.Globalization.CultureInfo.CurrentCulture,
-                "{0} x {1}, {2} Bit, {3} Hertz",
-                Width, Height, BitCount, Frequency);
+                $"{Width} x {Height}, {BitCount} Bit, {Frequency} Hertz, {Orientation}");
         }
     }
 
@@ -251,42 +260,42 @@ namespace Westwind.SetResolution
 
             // After the 32-bytes array
             [MarshalAs(UnmanagedType.U2)]
-            public UInt16 dmSpecVersion;
+            public ushort dmSpecVersion;
 
             [MarshalAs(UnmanagedType.U2)]
-            public UInt16 dmDriverVersion;
+            public ushort dmDriverVersion;
 
             [MarshalAs(UnmanagedType.U2)]
-            public UInt16 dmSize;
+            public ushort dmSize;
 
             [MarshalAs(UnmanagedType.U2)]
-            public UInt16 dmDriverExtra;
+            public ushort dmDriverExtra;
 
             [MarshalAs(UnmanagedType.U4)]
-            public UInt32 dmFields;
+            public uint dmFields;
 
             public POINTL dmPosition;
 
             [MarshalAs(UnmanagedType.U4)]
-            public UInt32 dmDisplayOrientation;
+            public uint dmDisplayOrientation;
 
             [MarshalAs(UnmanagedType.U4)]
-            public UInt32 dmDisplayFixedOutput;
+            public uint dmDisplayFixedOutput;
 
             [MarshalAs(UnmanagedType.I2)]
-            public Int16 dmColor;
+            public short dmColor;
 
             [MarshalAs(UnmanagedType.I2)]
-            public Int16 dmDuplex;
+            public short dmDuplex;
 
             [MarshalAs(UnmanagedType.I2)]
-            public Int16 dmYResolution;
+            public short dmYResolution;
 
             [MarshalAs(UnmanagedType.I2)]
-            public Int16 dmTTOption;
+            public short dmTTOption;
 
             [MarshalAs(UnmanagedType.I2)]
-            public Int16 dmCollate;
+            public short dmCollate;
 
             // CCHDEVICENAME = 32 = 0x50
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
@@ -297,46 +306,46 @@ namespace Westwind.SetResolution
             //public Byte[] dmFormName;
 
             [MarshalAs(UnmanagedType.U2)]
-            public UInt16 dmLogPixels;
+            public ushort dmLogPixels;
 
             [MarshalAs(UnmanagedType.U4)]
-            public UInt32 dmBitsPerPel;
+            public uint dmBitsPerPel;
 
             [MarshalAs(UnmanagedType.U4)]
-            public UInt32 dmPelsWidth;
+            public uint dmPelsWidth;
 
             [MarshalAs(UnmanagedType.U4)]
-            public UInt32 dmPelsHeight;
+            public uint dmPelsHeight;
 
             [MarshalAs(UnmanagedType.U4)]
-            public UInt32 dmDisplayFlags;
+            public uint dmDisplayFlags;
 
             [MarshalAs(UnmanagedType.U4)]
-            public UInt32 dmDisplayFrequency;
+            public uint dmDisplayFrequency;
 
             [MarshalAs(UnmanagedType.U4)]
-            public UInt32 dmICMMethod;
+            public uint dmICMMethod;
 
             [MarshalAs(UnmanagedType.U4)]
-            public UInt32 dmICMIntent;
+            public uint dmICMIntent;
 
             [MarshalAs(UnmanagedType.U4)]
-            public UInt32 dmMediaType;
+            public uint dmMediaType;
 
             [MarshalAs(UnmanagedType.U4)]
-            public UInt32 dmDitherType;
+            public uint dmDitherType;
 
             [MarshalAs(UnmanagedType.U4)]
-            public UInt32 dmReserved1;
+            public uint dmReserved1;
 
             [MarshalAs(UnmanagedType.U4)]
-            public UInt32 dmReserved2;
+            public uint dmReserved2;
 
             [MarshalAs(UnmanagedType.U4)]
-            public UInt32 dmPanningWidth;
+            public uint dmPanningWidth;
 
             [MarshalAs(UnmanagedType.U4)]
-            public UInt32 dmPanningHeight;
+            public uint dmPanningHeight;
 
             /// <summary>
             /// Initializes the structure variables.
@@ -353,19 +362,19 @@ namespace Westwind.SetResolution
         [StructLayout(LayoutKind.Sequential)]
         public struct POINTL
         {
-            public Int32 x;
-            public Int32 y;
+            public int x;
+            public int y;
         }
 
 
 
         [DllImport("User32.dll", SetLastError = true, BestFitMapping = false, ThrowOnUnmappableChar = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern Boolean EnumDisplaySettings(
+        public static extern bool EnumDisplaySettings(
             [param: MarshalAs(UnmanagedType.LPTStr)]
-            String lpszDeviceName,  // display device
+            string lpszDeviceName,  // display device
             [param: MarshalAs(UnmanagedType.U4)]
-            Int32 iModeNum,         // graphics mode
+            int iModeNum,         // graphics mode
             [In, Out]
             ref DEVMODE lpDevMode       // graphics mode settings
             );
@@ -404,7 +413,7 @@ namespace Westwind.SetResolution
             [param: MarshalAs(UnmanagedType.U4)]
             uint nSize,
             [param: MarshalAs(UnmanagedType.U4)]
-            uint Arguments);
+            uint arguments);
 
         public const uint FORMAT_MESSAGE_FROM_HMODULE = 0x800;
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Westwind.SetResolution.CommandLine;
 
@@ -22,7 +23,7 @@ namespace Westwind.SetResolution
 
             if (CommandLine.FirstParameter.Equals("List", StringComparison.OrdinalIgnoreCase))
             {
-                ListDisplayModes();
+                ListDisplayModes(CommandLine.ListAll);
             }
 
             if (CommandLine.FirstParameter.Equals("Profiles", StringComparison.OrdinalIgnoreCase))
@@ -70,7 +71,7 @@ namespace Westwind.SetResolution
                 Width = CommandLine.Width,
                 Height = CommandLine.Height,
                 Frequency = CommandLine.Frequency,
-                BitSize = CommandLine.BitSize,
+                BitSize = CommandLine.BitCount,
                 Orientation = CommandLine.Orientation,
             };
 
@@ -120,12 +121,12 @@ namespace Westwind.SetResolution
             var set = list.FirstOrDefault(d=> d.Width == CommandLine.Width && 
                                     d.Height == CommandLine.Height && 
                                     d.Frequency == CommandLine.Frequency &&
-                                    d.BitCount == CommandLine.BitSize &&
+                                    d.BitCount == CommandLine.BitCount &&
                                     d.Orientation == (Orientation) CommandLine.Orientation );
 
             if (set == null)
             {
-                ColorConsole.WriteError($"Couldn't find matching Display Mode.");
+                ColorConsole.WriteError($"Couldn't find a matching Display Mode.");
                 Console.WriteLine();
                 ListDisplayModes();
                 return;
@@ -135,15 +136,32 @@ namespace Westwind.SetResolution
             ColorConsole.WriteSuccess("Switched Display Mode to " + set.ToString());
         }
 
-        private void ListDisplayModes()
+        private void ListDisplayModes(bool showAll = false)
         {
             var list = DisplayManager.GetAllDisplayModes();
+            var current = DisplayManager.GetCurrentDisplaySetting();
+
+
+            ColorConsole.WriteLine("Current Display Mode", ConsoleColor.Yellow);
+            Console.WriteLine(current + "\n");
+
 
             ColorConsole.WriteLine("Available Display Modes", ConsoleColor.Yellow);
             ColorConsole.WriteLine("-----------------------", ConsoleColor.Yellow);
 
+            IEnumerable<DisplaySettings> filtered = list;
+            if (!CommandLine.ListAll)
+            {
+                filtered = list.Where(d =>
+                        d.Width >= 800 &&
+                        d.Frequency == current.Frequency &&
+                        d.Orientation == current.Orientation)
+                    // unique
+                    .GroupBy(d => new {d.Width, d.Height, d.Frequency, d.Orientation})
+                    .Select(g => g.First());
+            }
 
-            foreach (var set in list)
+            foreach (var set in filtered)
             {
                 Console.WriteLine(set.ToString());
             }
