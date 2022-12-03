@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "SetResolution": {
+      "commandName": "Project",
+      "commandLineArgs": "SET -p 4k"
+    }
+    }
+  }
+}
