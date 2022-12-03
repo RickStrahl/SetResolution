@@ -9,8 +9,13 @@ This small command line utility allows you to quickly set Windows Display Resolu
 ## Download
 This tool is a small, self-contained .NET Console EXE application and you can download that `SetResolution.exe` file directly from here:
 
+[Download SetResolution.exe](https://github.com/RickStrahl/SetResolution/raw/master/Binaries/SetResolution.exe)
+
 
 ## Syntax:
+To show available syntax, run the program without any parameters or `/?`. 
+
+The help information is as follows:
 
 ```txt
 Syntax:
@@ -42,4 +47,24 @@ SetResolution LIST
 SetResolution PROFILES
 SetResolution CREATEPROFILE -p "My Profile" -w 1920 -h 1080 -f 60
 ```
+
+### Add to the Windows Path
+We recommend that you add the `SetResolution.exe` folder to your Windows path so that you can always and quickly access the application to switch resolution from anywhere.
+
+### Profiles
+Profiles are 'shortcuts' to a specific set of Display Settings with a name and you can quickly access a profile with:
+
+```ps
+SetResolution SET -p <profileName>
+```
+
+You can create a profile with:
+
+```ps
+SetResolution CREATEPROFILE -p <profileName> -w 1280 -h 768 -f 59
+```
+
+Profiles are stored in `SetResolution.xml` in the same folder as the .exe. To remove profiles you can edit the `SetResolution.xml` file.
+
+
 
