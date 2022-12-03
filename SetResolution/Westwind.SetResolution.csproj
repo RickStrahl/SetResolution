@@ -2,10 +2,20 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-	<TargetFramework>net472</TargetFramework>
-	  <Version>0.1</Version>
-	<AssemblyName>SetResolution</AssemblyName>
+    <TargetFramework>net472</TargetFramework>
+    <Version>0.1.1</Version>
+    <AssemblyName>SetResolution</AssemblyName>
     <Namespace>Westwind.SetResolution</Namespace>
+
+    <ProductName>Set Windows Display Resolution</ProductName>
+    <Title>Set Resolution - Set Windows Display Resolution from Terminal</Title>
+    <Description>
+      Allows you set Windows display Resolution from the Terminal via simple commands. You can:
+      * set to a specific resolution, frequency, bitness and rotation
+      * list all available display modes
+      * create and use profiles for easy access
+    </Description>
+    <Copyright>West Wind Technologies, 2022-2023</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,14 +29,11 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
   </ItemGroup>
-	<ItemGroup>
-		<EmbeddedResource Update="Properties\Resources.resx">
-			<Generator>PublicResXFileCodeGenerator</Generator>
-			<LastGenOutput>Resources.Designer.cs</LastGenOutput>
-		</EmbeddedResource>
-	</ItemGroup>
-	<Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="">
-		<Exec Command="copy $(TargetDir)SetResolution.exe C:\Users\rstrahl\Dropbox\utl\SetResolution.exe" />
-		<Exec Command="copy $(TargetDir)SetResolution.exe $(SolutionDir)Binaries\SetResolution.exe" />
-	</Target>
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>

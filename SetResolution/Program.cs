@@ -28,17 +28,27 @@ namespace Westwind.SetResolution
             
             if (args == null || args.Length == 0 || args[0] == "HELP" || args[0] == "/?")
             {
-               
-                string options =
-                    $@"Set Display Resolution to any of the available machine display mode.
 
+                Console.WriteLine("Set Display Resolution to any of the available machine display mode.");
+
+
+                string options = $@"
 Syntax:
 -------
-SetResolution  [SET|LIST|PROFILES|CREATEPROFILE]  -w 1920 -h 1080 -f 60 -p ProfileName 
+SetResolution  [<ProfileName>|SET|LIST|PROFILES|CREATEPROFILE]
+               -w 1920 -h 1080 -f 60 -b 32 -o 0 -p ProfileName 
+";
 
+                Console.WriteLine(options);
+
+                ColorConsole.WriteWarning(
+                    "\nWarning: Setting an invalid mode may leave your screen unaccessible. Only pick supported modes.");
+
+                options = $@"
 Commands:
 ---------
-HELP || /?          This help display    
+HELP || /?          This help display
+<ProfileName>       Run with only a Profile Name sets that display profile
 SET                 Sets Display Settings - 
                     provide either a profile (-p) or display options -w/-h/-f/-b/-o
 LIST                Lists all available display modes
@@ -55,6 +65,7 @@ Display Settings:
 
 Examples:
 ---------
+SetResolution MyProfile
 SetResolution SET -p 1080    (a profile name)
 SetResolution SET -w 1920 -h 1080 -f 60
 SetResolution LIST 

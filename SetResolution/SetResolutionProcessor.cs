@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using Westwind.SetResolution.CommandLine;
 
 namespace Westwind.SetResolution
@@ -37,6 +33,20 @@ namespace Westwind.SetResolution
             if (CommandLine.FirstParameter.Equals("CreateProfile", StringComparison.OrdinalIgnoreCase))
             {
                 CreateProfile();
+            }
+
+            // No Action command (help is handled on startup)
+            if (CommandLine.FirstParameter.StartsWith("-"))
+            {
+                // assume we're using SetResolution with parameters
+                SetResolution();
+            }
+
+            // Launch Profile by name
+            if (AppConfiguration.Current.Profiles.Any(pro => pro.Name.Equals(CommandLine.FirstParameter, StringComparison.OrdinalIgnoreCase)))
+            {
+                CommandLine.Profile = CommandLine.FirstParameter;
+                SetResolution();
             }
         }
 

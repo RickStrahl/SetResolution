@@ -3,7 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33122.133
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Westwind.SetResolution", "SetResolution\Westwind.SetResolution.csproj", "{D5715759-1922-4203-961A-C10DE8EA36A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Westwind.SetResolution", "SetResolution\Westwind.SetResolution.csproj", "{D5715759-1922-4203-961A-C10DE8EA36A0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Files", "Solution Files", "{15259836-2069-4908-922C-1B7714FB51A3}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
