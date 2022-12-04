@@ -10,13 +10,13 @@ This small command line utility allows you to quickly set Windows Display Resolu
 > **Warning:** Use at your own risk. Setting an invalid display mode can [leave your screen inaccessible](#fark-i-set-a-resolution-that-doesnt-work-now-what). Use only with supported display modes. We check your settings against available modes and only allow those that match a driver display mode, but there may still be some modes that don't work with your monitor.
 
 ## Download
-This tool is a small, self-contained Console EXE application, and you can download the `SetResolution.exe` or `sr.exe` file directly from here:
+This tool is a small, self-contained Console EXE application and you can download the `SetResolution.exe` (or `sr.exe` file directly from here):
 
 [Download SetResolution.exe](https://github.com/RickStrahl/SetResolution/raw/master/Binaries/SetResolution.exe)
 
-I recommend you copy to a folder location that is in your Windows path, or add it to your path, so you can run `SetResoltion` from any location.
+I recommend you copy to a folder location that is in your Windows path or add it to your path, so you can run `SetResoltion` from any location.
 
-Most common usage is with a pre-defined **profile name**:
+Most common usage is with a pre-define profile name:
 
 ```powershell
 # Set to a profile named 1080
@@ -27,8 +27,7 @@ sr 4k
 ```
 ## Syntax
 To show available syntax, run `SetResolution.exe` or `sr.exe` without any parameters or `/?` or `HELP`. 
-
-Here are the command line options:
+The help information is as follows:
 
 ```text
 Syntax:
@@ -65,11 +64,11 @@ SetResolution PROFILES
 SetResolution CREATEPROFILE -p "My Profile" -w 1920 -h 1080 -f 60
 ```
 
-## Add to the Windows Path
+### Add to the Windows Path
 We recommend that you add the `SetResolution.exe` folder to your Windows path so that you can always and quickly access the application to switch resolution from anywhere.
 
-### Listing available Display Modes
-You can also list available Profiles via the `LIST` command:
+## List Display Modes
+You can list available Display Modes the `LIST` command:
 
 ```powershell
 SetResolution LIST
@@ -81,27 +80,27 @@ This shows a list of display modes available. By default the list only shows:
 * Frequencies that match the current display frequency
 * Orientation that match the current orientation
 
+This list is similar to the list you see in the Windows Display Resolution drop down list.
+
 If you want to see `all display modes` use the `-la` command line switch:
 
 ```powershell
 SetResolution LIST -la
 ```
 
-This displays all displays modes for all sizes, orientations and frequencies.
+This displays all displays modes for all sizes, orientations and frequencies. This list tends to very large with many duplicate and overlapping values. However it can be useful to match an exact display mode.
 
-Use these display modes when you create new Profiles and ensure they match one of the listed modes.
-
+Use these display modes when you create new Profiles and ensure your Profile matches the Display Modes that are supported.
 
 ## Profiles
-Profiles are 'shortcuts' to a specific set of Display Settings.
+Profiles are the preferred way to switch resolutions as they give you quick access via a single profile name string, instead of having to specify all the settings individually.
 
-### Selecting a Profile to Set the Display Mode
-with a name and you can quickly access a profile with:
+Profiles are 'shortcuts' to a specific set of Display Settings with a name. You can quickly access a profile with:
 
+### Setting a Profile
 ```powershell
 SetResolution SET -p <profileName>
 ```
-
 ### Create a new Profile
 You can create a profile with:
 
@@ -109,10 +108,9 @@ You can create a profile with:
 SetResolution CREATEPROFILE -p <profileName> -w 1280 -h 768 -f 59
 ```
 
-### Profile Storage Location
-Profiles are stored in `SetResolution.xml` in the same folder as the .exe. To remove profiles you can edit the `SetResolution.xml` file.
+Profiles are stored in `SetResolution.xml` in the same folder as the .exe and you can manually edit the XML file to add new profiles. In order to remove profiles you can edit the `SetResolution.xml` file.
 
-#### Default Profiles
+### Default Profiles
 A number of default profiles are added for common 16:9 resolutions @ 60hz which is most common:
 
 ```text
@@ -126,7 +124,7 @@ Available Profiles
 
 These are loaded on first load of the application and stored in the saved profile file (if writable).
 
-### Profile Location
+### Profiles File Location: SetResolution.xml
 Profiles are stored on disk in `SetResolution.xml` in the same folder as the `.exe` and you can add and remove additional profiles there or add via the `CREATEPROFILE` action as described above.
 
 > **Note:** If you installed the EXE in a location that has no write access, saving of new Profile entries with `CREATEPROFILE` will fail silently. Either give `SetResolution.xml` read/write access or move the application to a location where you are allowed to write files.
@@ -137,9 +135,9 @@ If you accidentally set your monitor into a display mode that isn't supported or
 
 To reset a non-working display setting you have to **boot into Windows Safe Mode** and select another display mode, then reboot. 
 
-It should be very hard to do this with this tool:  We set the display mode only to modes that are available on the active video driver, so setting a non-supported resolution should never happen. However, you can end up with a resolution that your driver supports but that your monitor can't display - this mostly involves unsupported frequencies.
+Note: It's difficult to select an invalid display mode. We set the display mode only to modes that are available for the current display, so setting a non-supported resolution should in theory never happen. However, you can end up with a resolution that your driver supports but that your monitor does not. This mostly involves unsupported frequencies.
 
-> Moral of the Story: Pick a display mode that you know works using common, widely used resolutions.
+> Moral of the Story: Pick a display mode that you know works using common, widely used resolutions. If not sure try the settings in the Windows Resolution box first.
 
 ## Credits
 Most of the hard work of this tool is in the Win32 interfaces to retrieve and set display settings. All of that code is based on this excellent article on C# Corner by [Mohammad Elseheimy](https://www.c-sharpcorner.com/members/mohammad-elsheimy):
@@ -147,6 +145,7 @@ Most of the hard work of this tool is in the Win32 interfaces to retrieve and se
 * [Changing Display Settings Programmatically
 ](https://www.c-sharpcorner.com/uploadfile/GemingLeader/changing-display-settings-programmatically/)
 
-## To Do
+## To do
 
-* Add Support for setting Display Mode for non-main Monitor
+* Add support for configuration of non-default monitor(S)
+
