@@ -5,7 +5,7 @@ namespace Westwind.SetResolution
 {
     static class DisplayManagerNative
     {
-        #region Enum DriverDeviceName Settings
+        #region Enum Display Settings
 
         public static byte[] ToLPTStr(string str)
         {
@@ -22,11 +22,12 @@ namespace Westwind.SetResolution
             return lptArray;
         }
 
-        [DllImport("User32.dll", SetLastError = true, BestFitMapping = false, ThrowOnUnmappableChar = true, CharSet = CharSet.Ansi)]
+        [DllImport("User32.dll", SetLastError = true, BestFitMapping = false, ThrowOnUnmappableChar = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool EnumDisplaySettings(
             //[param: MarshalAs(UnmanagedType.LPTStr)]
-            byte[] lpszDeviceName,  // display device
+            //string lpszDeviceName, //display device
+            byte[] lpszDeviceName,  // display device   ToLPTStr
             [param: MarshalAs(UnmanagedType.U4)]
             int iModeNum,         // graphics mode
             [In, Out]
@@ -219,6 +220,14 @@ namespace Westwind.SetResolution
             ref DEVMODE lpDevMode,
             [param: MarshalAs(UnmanagedType.U4)]
             uint dwflags);
+
+
+        [DllImport("user32.dll")]
+        public static extern int ChangeDisplaySettingsEx(string lpszDeviceName, 
+            ref DEVMODE lpDevMode, 
+            IntPtr hwnd,
+            uint dwflags, 
+            IntPtr lParam);
 
 
 

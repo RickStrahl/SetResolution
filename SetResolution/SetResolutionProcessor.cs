@@ -92,12 +92,22 @@ namespace Westwind.SetResolution
 
         private void SetResolution()
         {
+            var devices = DisplayManager.GetAllDisplayDevices();
+            var monitor = devices.FirstOrDefault(d => d.IsSelected);  // main monitor
+            if (CommandLine.MonitorId > 0)
+            {
+                monitor = devices.FirstOrDefault(d => d.Index == CommandLine.MonitorId);
+                devices.ForEach(d=> d.IsSelected = false);
+                monitor.IsSelected = true;
+            }
+
+
             if (!string.IsNullOrEmpty(CommandLine.Profile))
             {
                 var profile = AppConfiguration.Current.Profiles.FirstOrDefault(p=> p.Name.Equals(CommandLine.Profile, StringComparison.OrdinalIgnoreCase));
                 if (profile == null)
                 {
-                    ColorConsole.WriteError($"Couldn't find DriverDeviceName Profile {CommandLine.Profile}");
+                    ColorConsole.WriteError($"Couldn't find Display Profile {CommandLine.Profile}");
                     Console.WriteLine();
                     ListProfiles();
                     return;
@@ -117,7 +127,8 @@ namespace Westwind.SetResolution
                 CommandLine.Frequency = 60;
             }
 
-            var list = DisplayManager.GetAllDisplaySettings();
+            var list = DisplayManager.GetAllDisplaySettings(monitor.DriverDeviceName);
+
             var set = list.FirstOrDefault(d=> d.Width == CommandLine.Width && 
                                     d.Height == CommandLine.Height && 
                                     d.Frequency == CommandLine.Frequency &&
@@ -126,24 +137,24 @@ namespace Westwind.SetResolution
 
             if (set == null)
             {
-                ColorConsole.WriteError($"Couldn't find a matching DriverDeviceName Mode.");
+                ColorConsole.WriteError($"Couldn't find a matching Display Mode.");
                 Console.WriteLine();
                 ListDisplayModes();
                 return;
             }
 
-            DisplayManager.SetDisplaySettings(set);
-            ColorConsole.WriteSuccess("Switched DriverDeviceName Mode to " + set.ToString());
+            DisplayManager.SetDisplaySettings(set, monitor.DriverDeviceName);
+            ColorConsole.WriteSuccess("Switched Display Mode to " + set.ToString());
         }
 
         private void ListDisplayModes(bool showAll = false)
         {
             var devices = DisplayManager.GetAllDisplayDevices();
-
             var monitor = devices.FirstOrDefault(d => d.IsSelected);  // main monitor
             if (CommandLine.MonitorId > 0)
             {
                 monitor = devices.FirstOrDefault(d => d.Index == CommandLine.MonitorId);
+                devices.ForEach(d => d.IsSelected = false);
                 monitor.IsSelected = true;
             }
 

@@ -2,7 +2,7 @@
  * Original code based on:
  *
  * (c) Mohammad Elsheimy
- * Changing DriverDeviceName Settings Programmatically
+ * Changing Display Settings Programmatically
  *
  * https://www.c-sharpcorner.com/uploadfile/GemingLeader/changing-display-settings-programmatically/
 */
@@ -22,9 +22,9 @@ namespace Westwind.SetResolution
         /// <summary>
         /// Returns a DisplaySettings object encapsulates the current display settings.
         /// </summary>
-        public static DisplaySettings GetCurrentSettings()
+        public static DisplaySettings GetCurrentSettings(string deviceName = null)
         {
-            return CreateDisplaySettingsObject(-1, GetDeviceMode());
+            return CreateDisplaySettingsObject(-1, GetDeviceMode(deviceName));
         }
 
         /// <summary>
@@ -34,17 +34,21 @@ namespace Westwind.SetResolution
         /// <remarks>
         /// Internally calls ChangeDisplaySettings() native function.
         /// </remarks>
-        public static void SetDisplaySettings(DisplaySettings set)
+        public static void SetDisplaySettings(DisplaySettings set, string deviceName = null)
         {
-            DisplayManagerNative.DEVMODE mode = GetDeviceMode();
+            DisplayManagerNative.DEVMODE mode = GetDeviceMode(deviceName);
 
             mode.dmPelsWidth = (uint)set.Width;
             mode.dmPelsHeight = (uint)set.Height;
             mode.dmDisplayOrientation = (uint)set.Orientation;
             mode.dmBitsPerPel = (uint)set.BitCount;
             mode.dmDisplayFrequency = (uint)set.Frequency;
+           
 
-            DisplayChangeResult result = (DisplayChangeResult)DisplayManagerNative.ChangeDisplaySettings(ref mode, 0);
+
+            //DisplayChangeResult result = (DisplayChangeResult)DisplayManagerNative.ChangeDisplaySettings(ref mode, 0);
+            DisplayChangeResult result = (DisplayChangeResult)DisplayManagerNative.ChangeDisplaySettingsEx(deviceName, ref mode, IntPtr.Zero,  0, IntPtr.Zero);
+
 
             string msg = null;
             switch (result)
@@ -101,7 +105,8 @@ namespace Westwind.SetResolution
             int idx = 0;
             
             while (DisplayManagerNative.EnumDisplaySettings(DisplayManagerNative.ToLPTStr(deviceName), idx, ref mode))
-                list.Add(CreateDisplaySettingsObject(idx++, mode));
+            //while (DisplayManagerNative.EnumDisplaySettings(deviceName, idx, ref mode))
+                    list.Add(CreateDisplaySettingsObject(idx++, mode));
 
             return list;
         }
@@ -129,6 +134,7 @@ namespace Westwind.SetResolution
                     {
                         Index = displayIndex,
                         Id = device.DeviceID,
+
                         MonitorDeviceName = device.DeviceName,
                         DriverDeviceName = deviceName,
                         
@@ -214,13 +220,13 @@ namespace Westwind.SetResolution
         /// <remarks>
         /// Internally calls EnumDisplaySettings() native function with the value ENUM_CURRENT_SETTINGS (-1) to retrieve the current settings.
         /// </remarks>
-        private static DisplayManagerNative.DEVMODE GetDeviceMode()
+        private static DisplayManagerNative.DEVMODE GetDeviceMode(string deviceName = null)
         {
             var mode = new DisplayManagerNative.DEVMODE();
 
             mode.Initialize();
 
-            if (DisplayManagerNative.EnumDisplaySettings(null, DisplayManagerNative.ENUM_CURRENT_SETTINGS, ref mode))
+            if (DisplayManagerNative.EnumDisplaySettings(DisplayManagerNative.ToLPTStr(deviceName), DisplayManagerNative.ENUM_CURRENT_SETTINGS, ref mode))
                 return mode;
             else
                 throw new InvalidOperationException(GetLastError());

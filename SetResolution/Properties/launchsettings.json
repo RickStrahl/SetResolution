@@ -2,7 +2,7 @@
   "profiles": {
     "SetResolution": {
       "commandName": "Project",
-      "commandLineArgs": "LIST -m 1"
+      "commandLineArgs": "SET -p 4k -m 2"
     }
   }
 }
