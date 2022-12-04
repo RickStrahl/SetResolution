@@ -97,7 +97,7 @@ namespace Westwind.SetResolution
                 var profile = AppConfiguration.Current.Profiles.FirstOrDefault(p=> p.Name.Equals(CommandLine.Profile, StringComparison.OrdinalIgnoreCase));
                 if (profile == null)
                 {
-                    ColorConsole.WriteError($"Couldn't find Display Profile {CommandLine.Profile}");
+                    ColorConsole.WriteError($"Couldn't find DriverDeviceName Profile {CommandLine.Profile}");
                     Console.WriteLine();
                     ListProfiles();
                     return;
@@ -117,7 +117,7 @@ namespace Westwind.SetResolution
                 CommandLine.Frequency = 60;
             }
 
-            var list = DisplayManager.GetAllDisplayModes();
+            var list = DisplayManager.GetAllDisplaySettings();
             var set = list.FirstOrDefault(d=> d.Width == CommandLine.Width && 
                                     d.Height == CommandLine.Height && 
                                     d.Frequency == CommandLine.Frequency &&
@@ -126,36 +126,57 @@ namespace Westwind.SetResolution
 
             if (set == null)
             {
-                ColorConsole.WriteError($"Couldn't find a matching Display Mode.");
+                ColorConsole.WriteError($"Couldn't find a matching DriverDeviceName Mode.");
                 Console.WriteLine();
                 ListDisplayModes();
                 return;
             }
 
             DisplayManager.SetDisplaySettings(set);
-            ColorConsole.WriteSuccess("Switched Display Mode to " + set.ToString());
+            ColorConsole.WriteSuccess("Switched DriverDeviceName Mode to " + set.ToString());
         }
 
         private void ListDisplayModes(bool showAll = false)
         {
-            var list = DisplayManager.GetAllDisplayModes();
+            var devices = DisplayManager.GetAllDisplayDevices();
+
+            var monitor = devices.FirstOrDefault(d => d.IsSelected);  // main monitor
+            if (CommandLine.MonitorId > 0)
+            {
+                monitor = devices.FirstOrDefault(d => d.Index == CommandLine.MonitorId);
+                monitor.IsSelected = true;
+            }
+
+            var displayModes = DisplayManager.GetAllDisplaySettings(monitor.DriverDeviceName);
             var current = DisplayManager.GetCurrentDisplaySetting();
 
-
-            ColorConsole.WriteLine("Current Display Mode", ConsoleColor.Yellow);
+            string text = $"Current Monitor and Display Mode";
+            ColorConsole.WriteLine(text, ConsoleColor.Yellow);
+            ColorConsole.WriteLine( new string('-',  text.Length), ConsoleColor.Yellow);
+            Console.WriteLine($"{monitor.Index} {monitor.DisplayName}");
             Console.WriteLine(current + "\n");
 
 
-            ColorConsole.WriteLine("Available Display Modes", ConsoleColor.Yellow);
-            ColorConsole.WriteLine("-----------------------", ConsoleColor.Yellow);
+            ColorConsole.WriteLine("Available Monitors", ConsoleColor.Yellow);
+            ColorConsole.WriteLine("------------------", ConsoleColor.Yellow);
+            foreach (var device in devices)
+            {
+                Console.WriteLine(device);
+            }
+            Console.WriteLine();
 
-            IEnumerable<DisplaySettings> filtered = list;
+            text = $"Available Display Modes";
+            ColorConsole.WriteLine(text, ConsoleColor.Yellow);
+            ColorConsole.WriteLine( new string('-',text.Length), ConsoleColor.Yellow);
+
+            IEnumerable<DisplaySettings> filtered = displayModes;
             if (!CommandLine.ListAll)
             {
-                filtered = list.Where(d =>
+                filtered = displayModes.Where(d =>
                         d.Width >= 800 &&
                         d.Frequency == current.Frequency &&
                         d.Orientation == current.Orientation)
+                    .OrderByDescending(d=> d.Width)
                     // unique
                     .GroupBy(d => new {d.Width, d.Height, d.Frequency, d.Orientation})
                     .Select(g => g.First());
@@ -169,7 +190,7 @@ namespace Westwind.SetResolution
 
         private void ListProfiles()
         {
-            var list = DisplayManager.GetAllDisplayModes();
+            var list = DisplayManager.GetAllDisplaySettings();
 
             ColorConsole.WriteLine("Available Profiles", ConsoleColor.Yellow);
             ColorConsole.WriteLine("-----------------------", ConsoleColor.Yellow);

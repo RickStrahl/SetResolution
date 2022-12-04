@@ -65,24 +65,10 @@ SetResolution PROFILES
 SetResolution CREATEPROFILE -p "My Profile" -w 1920 -h 1080 -f 60
 ```
 
-### Add to the Windows Path
+## Add to the Windows Path
 We recommend that you add the `SetResolution.exe` folder to your Windows path so that you can always and quickly access the application to switch resolution from anywhere.
 
-### Profiles
-Profiles are 'shortcuts' to a specific set of Display Settings with a name and you can quickly access a profile with:
-
-```powershell
-SetResolution SET -p <profileName>
-```
-
-You can create a profile with:
-
-```powershell
-SetResolution CREATEPROFILE -p <profileName> -w 1280 -h 768 -f 59
-```
-
-Profiles are stored in `SetResolution.xml` in the same folder as the .exe. To remove profiles you can edit the `SetResolution.xml` file.
-
+### Listing available Display Modes
 You can also list available Profiles via the `LIST` command:
 
 ```powershell
@@ -105,6 +91,27 @@ This displays all displays modes for all sizes, orientations and frequencies.
 
 Use these display modes when you create new Profiles and ensure they match one of the listed modes.
 
+
+## Profiles
+Profiles are 'shortcuts' to a specific set of Display Settings.
+
+### Selecting a Profile to Set the Display Mode
+with a name and you can quickly access a profile with:
+
+```powershell
+SetResolution SET -p <profileName>
+```
+
+### Create a new Profile
+You can create a profile with:
+
+```powershell
+SetResolution CREATEPROFILE -p <profileName> -w 1280 -h 768 -f 59
+```
+
+### Profile Storage Location
+Profiles are stored in `SetResolution.xml` in the same folder as the .exe. To remove profiles you can edit the `SetResolution.xml` file.
+
 #### Default Profiles
 A number of default profiles are added for common 16:9 resolutions @ 60hz which is most common:
 
@@ -119,7 +126,7 @@ Available Profiles
 
 These are loaded on first load of the application and stored in the saved profile file (if writable).
 
-#### Profile Location
+### Profile Location
 Profiles are stored on disk in `SetResolution.xml` in the same folder as the `.exe` and you can add and remove additional profiles there or add via the `CREATEPROFILE` action as described above.
 
 > **Note:** If you installed the EXE in a location that has no write access, saving of new Profile entries with `CREATEPROFILE` will fail silently. Either give `SetResolution.xml` read/write access or move the application to a location where you are allowed to write files.
@@ -140,4 +147,6 @@ Most of the hard work of this tool is in the Win32 interfaces to retrieve and se
 * [Changing Display Settings Programmatically
 ](https://www.c-sharpcorner.com/uploadfile/GemingLeader/changing-display-settings-programmatically/)
 
+## To Do
 
+* Add Support for setting Display Mode for non-main Monitor

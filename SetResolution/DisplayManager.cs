@@ -2,7 +2,7 @@
  * Original code based on:
  *
  * (c) Mohammad Elsheimy
- * Changing Display Settings Programmatically
+ * Changing DriverDeviceName Settings Programmatically
  *
  * https://www.c-sharpcorner.com/uploadfile/GemingLeader/changing-display-settings-programmatically/
 */
@@ -36,7 +36,7 @@ namespace Westwind.SetResolution
         /// </remarks>
         public static void SetDisplaySettings(DisplaySettings set)
         {
-            SafeNativeMethods.DEVMODE mode = GetDeviceMode();
+            DisplayManagerNative.DEVMODE mode = GetDeviceMode();
 
             mode.dmPelsWidth = (uint)set.Width;
             mode.dmPelsHeight = (uint)set.Height;
@@ -44,7 +44,7 @@ namespace Westwind.SetResolution
             mode.dmBitsPerPel = (uint)set.BitCount;
             mode.dmDisplayFrequency = (uint)set.Frequency;
 
-            DisplayChangeResult result = (DisplayChangeResult)SafeNativeMethods.ChangeDisplaySettings(ref mode, 0);
+            DisplayChangeResult result = (DisplayChangeResult)DisplayManagerNative.ChangeDisplaySettings(ref mode, 0);
 
             string msg = null;
             switch (result)
@@ -91,19 +91,77 @@ namespace Westwind.SetResolution
         /// Returns a list of all the display settings
         /// </summary>
         /// <returns></returns>
-        public static List<DisplaySettings> GetAllDisplayModes()
+        public static List<DisplaySettings> GetAllDisplaySettings(string deviceName = null)
         {
             var list = new List<DisplaySettings>();
-            SafeNativeMethods.DEVMODE mode = new SafeNativeMethods.DEVMODE();
+            DisplayManagerNative.DEVMODE mode = new DisplayManagerNative.DEVMODE();
 
             mode.Initialize();
 
             int idx = 0;
-
-            while (SafeNativeMethods.EnumDisplaySettings(null, idx, ref mode))
+            
+            while (DisplayManagerNative.EnumDisplaySettings(DisplayManagerNative.ToLPTStr(deviceName), idx, ref mode))
                 list.Add(CreateDisplaySettingsObject(idx++, mode));
 
             return list;
+        }
+
+        public static List<DisplayDevice> GetAllDisplayDevices()
+        {
+            var list = new List<DisplayDevice>();
+            uint idx = 0;
+            uint size = 256;
+
+            var device = new DisplayManagerNative.DISPLAY_DEVICE();
+            device.cb = Marshal.SizeOf(device);
+            int displayIndex = 0;
+
+            while (DisplayManagerNative.EnumDisplayDevices(null, idx, ref device, size) )
+            {
+                if (device.StateFlags.HasFlag(DisplayManagerNative.DisplayDeviceStateFlags.AttachedToDesktop))
+                {
+                    var isPrimary = device.StateFlags.HasFlag(DisplayManagerNative.DisplayDeviceStateFlags.PrimaryDevice);
+                    var deviceName = device.DeviceName;
+                    
+                    DisplayManagerNative.EnumDisplayDevices(device.DeviceName, 0, ref device, 0);
+                    displayIndex++;
+                    var dev = new DisplayDevice()
+                    {
+                        Index = displayIndex,
+                        Id = device.DeviceID,
+                        MonitorDeviceName = device.DeviceName,
+                        DriverDeviceName = deviceName,
+                        
+                        DisplayName = device.DeviceString,
+                        IsPrimary = isPrimary,
+                        IsSelected = isPrimary
+                    };
+                    list.Add(dev);
+                }
+
+                idx++;
+
+                device = new DisplayManagerNative.DISPLAY_DEVICE();
+                device.cb = Marshal.SizeOf(device);
+            }
+
+            return list;
+        }
+
+        public class DisplayDevice
+        {
+            public int Index { get; set; }
+            public string MonitorDeviceName { get; set;  }
+            public string Id { get; set; }
+            public string DriverDeviceName { get; set; }
+            public string DisplayName { get; set; }
+            public bool IsPrimary { get; set; }
+            public bool IsSelected { get; set; }
+
+            public override string ToString()
+            {
+                return $"{Index} {DisplayName}{(IsPrimary ? " (main)" : "")}{(IsSelected ? " (selected)" :"")}";
+            }
         }
 
         /// <summary>
@@ -137,7 +195,7 @@ namespace Westwind.SetResolution
         /// </summary>
         /// <param name="idx">The mode index attached with the settings. Starts form zero. Is -1 for the current settings.</param>
         /// <param name="mode">The current DEVMODE object represents the display information to derive the DisplaySettings object from.</param>
-        private static DisplaySettings CreateDisplaySettingsObject(int idx, SafeNativeMethods.DEVMODE mode)
+        private static DisplaySettings CreateDisplaySettingsObject(int idx, DisplayManagerNative.DEVMODE mode)
         {
             return new DisplaySettings()
             {
@@ -156,13 +214,13 @@ namespace Westwind.SetResolution
         /// <remarks>
         /// Internally calls EnumDisplaySettings() native function with the value ENUM_CURRENT_SETTINGS (-1) to retrieve the current settings.
         /// </remarks>
-        private static SafeNativeMethods.DEVMODE GetDeviceMode()
+        private static DisplayManagerNative.DEVMODE GetDeviceMode()
         {
-            var mode = new SafeNativeMethods.DEVMODE();
+            var mode = new DisplayManagerNative.DEVMODE();
 
             mode.Initialize();
 
-            if (SafeNativeMethods.EnumDisplaySettings(null, SafeNativeMethods.ENUM_CURRENT_SETTINGS, ref mode))
+            if (DisplayManagerNative.EnumDisplaySettings(null, DisplayManagerNative.ENUM_CURRENT_SETTINGS, ref mode))
                 return mode;
             else
                 throw new InvalidOperationException(GetLastError());
@@ -172,8 +230,8 @@ namespace Westwind.SetResolution
         {
             int err = Marshal.GetLastWin32Error();
 
-            if (SafeNativeMethods.FormatMessage(SafeNativeMethods.FORMAT_MESSAGE_FLAGS,
-                    SafeNativeMethods.FORMAT_MESSAGE_FROM_HMODULE,
+            if (DisplayManagerNative.FormatMessage(DisplayManagerNative.FORMAT_MESSAGE_FLAGS,
+                    DisplayManagerNative.FORMAT_MESSAGE_FROM_HMODULE,
                     (uint)err, 0, out var msg, 0, 0) == 0)
                 return Properties.Resources.InvalidOperation_FatalError;
             else
@@ -242,184 +300,4 @@ namespace Westwind.SetResolution
     }
 
 
-    static class SafeNativeMethods
-    {
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-        public struct DEVMODE
-        {
-            // You can define the following constant
-            // but OUTSIDE the structure because you know
-            // that size and layout of the structure is very important
-            // CCHDEVICENAME = 32 = 0x50
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
-            public string dmDeviceName;
-            // In addition you can define the last character array
-            // as following:
-            //[MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
-            //public Char[] dmDeviceName;
-
-            // After the 32-bytes array
-            [MarshalAs(UnmanagedType.U2)]
-            public ushort dmSpecVersion;
-
-            [MarshalAs(UnmanagedType.U2)]
-            public ushort dmDriverVersion;
-
-            [MarshalAs(UnmanagedType.U2)]
-            public ushort dmSize;
-
-            [MarshalAs(UnmanagedType.U2)]
-            public ushort dmDriverExtra;
-
-            [MarshalAs(UnmanagedType.U4)]
-            public uint dmFields;
-
-            public POINTL dmPosition;
-
-            [MarshalAs(UnmanagedType.U4)]
-            public uint dmDisplayOrientation;
-
-            [MarshalAs(UnmanagedType.U4)]
-            public uint dmDisplayFixedOutput;
-
-            [MarshalAs(UnmanagedType.I2)]
-            public short dmColor;
-
-            [MarshalAs(UnmanagedType.I2)]
-            public short dmDuplex;
-
-            [MarshalAs(UnmanagedType.I2)]
-            public short dmYResolution;
-
-            [MarshalAs(UnmanagedType.I2)]
-            public short dmTTOption;
-
-            [MarshalAs(UnmanagedType.I2)]
-            public short dmCollate;
-
-            // CCHDEVICENAME = 32 = 0x50
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
-            public string dmFormName;
-            // Also can be defined as
-            //[MarshalAs(UnmanagedType.ByValArray, 
-            //    SizeConst = 32, ArraySubType = UnmanagedType.U1)]
-            //public Byte[] dmFormName;
-
-            [MarshalAs(UnmanagedType.U2)]
-            public ushort dmLogPixels;
-
-            [MarshalAs(UnmanagedType.U4)]
-            public uint dmBitsPerPel;
-
-            [MarshalAs(UnmanagedType.U4)]
-            public uint dmPelsWidth;
-
-            [MarshalAs(UnmanagedType.U4)]
-            public uint dmPelsHeight;
-
-            [MarshalAs(UnmanagedType.U4)]
-            public uint dmDisplayFlags;
-
-            [MarshalAs(UnmanagedType.U4)]
-            public uint dmDisplayFrequency;
-
-            [MarshalAs(UnmanagedType.U4)]
-            public uint dmICMMethod;
-
-            [MarshalAs(UnmanagedType.U4)]
-            public uint dmICMIntent;
-
-            [MarshalAs(UnmanagedType.U4)]
-            public uint dmMediaType;
-
-            [MarshalAs(UnmanagedType.U4)]
-            public uint dmDitherType;
-
-            [MarshalAs(UnmanagedType.U4)]
-            public uint dmReserved1;
-
-            [MarshalAs(UnmanagedType.U4)]
-            public uint dmReserved2;
-
-            [MarshalAs(UnmanagedType.U4)]
-            public uint dmPanningWidth;
-
-            [MarshalAs(UnmanagedType.U4)]
-            public uint dmPanningHeight;
-
-            /// <summary>
-            /// Initializes the structure variables.
-            /// </summary>
-            public void Initialize()
-            {
-                this.dmDeviceName = new string(new char[32]);
-                this.dmFormName = new string(new char[32]);
-                this.dmSize = (ushort)Marshal.SizeOf(this);
-            }
-        }
-
-        // 8-bytes structure
-        [StructLayout(LayoutKind.Sequential)]
-        public struct POINTL
-        {
-            public int x;
-            public int y;
-        }
-
-
-
-        [DllImport("User32.dll", SetLastError = true, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool EnumDisplaySettings(
-            [param: MarshalAs(UnmanagedType.LPTStr)]
-            string lpszDeviceName,  // display device
-            [param: MarshalAs(UnmanagedType.U4)]
-            int iModeNum,         // graphics mode
-            [In, Out]
-            ref DEVMODE lpDevMode       // graphics mode settings
-            );
-
-        public const int ENUM_CURRENT_SETTINGS = -1;
-        public const int DMDO_DEFAULT = 0;
-        public const int DMDO_90 = 1;
-        public const int DMDO_180 = 2;
-        public const int DMDO_270 = 3;
-
-
-
-        [DllImport("User32.dll", SetLastError = true, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-        [return: MarshalAs(UnmanagedType.I4)]
-        public static extern int ChangeDisplaySettings(
-            [In, Out]
-            ref DEVMODE lpDevMode,
-            [param: MarshalAs(UnmanagedType.U4)]
-            uint dwflags);
-
-
-
-        [DllImport("kernel32.dll", SetLastError = true, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern uint FormatMessage(
-            [param: MarshalAs(UnmanagedType.U4)]
-            uint dwFlags,
-            [param: MarshalAs(UnmanagedType.U4)]
-            uint lpSource,
-            [param: MarshalAs(UnmanagedType.U4)]
-            uint dwMessageId,
-            [param: MarshalAs(UnmanagedType.U4)]
-            uint dwLanguageId,
-            [param: MarshalAs(UnmanagedType.LPTStr)]
-            out string lpBuffer,
-            [param: MarshalAs(UnmanagedType.U4)]
-            uint nSize,
-            [param: MarshalAs(UnmanagedType.U4)]
-            uint arguments);
-
-        public const uint FORMAT_MESSAGE_FROM_HMODULE = 0x800;
-
-        public const uint FORMAT_MESSAGE_ALLOCATE_BUFFER = 0x100;
-        public const uint FORMAT_MESSAGE_IGNORE_INSERTS = 0x200;
-        public const uint FORMAT_MESSAGE_FROM_SYSTEM = 0x1000;
-        public const uint FORMAT_MESSAGE_FLAGS = FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_IGNORE_INSERTS | FORMAT_MESSAGE_FROM_SYSTEM;
-    }
 }
