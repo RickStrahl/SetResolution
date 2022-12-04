@@ -19,12 +19,12 @@ I recommend you copy to a folder location that is in your Windows path or add it
 Most common usage is with a pre-define profile name:
 
 ```powershell
+# Set to a profile named 1080
 SetResolution 1080
 
 # or shortcut version (sr.exe)
-sr 1080
+sr 4k
 ```
-
 ## Syntax
 To show available syntax, run `SetResolution.exe` or `sr.exe` without any parameters or `/?` or `HELP`. 
 The help information is as follows:
@@ -82,6 +82,28 @@ SetResolution CREATEPROFILE -p <profileName> -w 1280 -h 768 -f 59
 
 Profiles are stored in `SetResolution.xml` in the same folder as the .exe. To remove profiles you can edit the `SetResolution.xml` file.
 
+You can also list available Profiles via the `LIST` command:
+
+```powershell
+SetResolution LIST
+```
+
+This shows a list of display modes available. By default the list only shows:
+
+* Sizes with the Width > 800 pixels
+* Frequencies that match the current display frequency
+* Orientation that match the current orientation
+
+If you want to see `all display modes` use the `-la` command line switch:
+
+```powershell
+SetResolution LIST -la
+```
+
+This displays all displays modes for all sizes, orientations and frequencies.
+
+Use these display modes when you create new Profiles and ensure they match one of the listed modes.
+
 #### Default Profiles
 A number of default profiles are added for common 16:9 resolutions @ 60hz which is most common:
 
@@ -102,14 +124,14 @@ Profiles are stored on disk in `SetResolution.xml` in the same folder as the `.e
 > **Note:** If you installed the EXE in a location that has no write access, saving of new Profile entries with `CREATEPROFILE` will fail silently. Either give `SetResolution.xml` read/write access or move the application to a location where you are allowed to write files.
 
 
-## Fark: I Set a Resolution that doesn't work. Now what?
-If you accidentally set your monitor into a display mode that isn't supported or just doesn't work, it's possible that the your screen becomes inaccessible. Because this tool switches the default display settings, once a wrong setting is made the screen simply will be blank and it's not just a simple matter of rebooting as the setting is applied to the Windows settings and persists on a reboot.
+## Fark: I set a Resolution that doesn't work. Now what?
+If you accidentally set your monitor into a display mode that isn't supported or just doesn't work with your monitor, it's possible that your screen becomes inaccessible. Because this tool switches the default display settings, once a wrong setting is made the screen simply will be blank and it's not just a simple matter of rebooting as the setting is applied to the Windows settings and persists on a reboot.
 
-To reset an invalid setting you have to **boot into Windows Safe Mode** and select another display mode, then reboot.
+To reset a non-working display setting you have to **boot into Windows Safe Mode** and select another display mode, then reboot. 
+
+It should be very hard to do this with this tool:  We set the display mode only to modes that are available on the active video driver, so setting a non-supported resolution should never happen. However, you can end up with a resolution that your driver supports but that your monitor can't display - this mostly involves unsupported frequencies.
 
 > Moral of the Story: Pick a display mode that you know works using common, widely used resolutions.
-
-Note it's not easy to do this: We set the display mode only to modes that have been retrieved just before, so realistically display modes should never be mismatched from what the monitor supports. Still, it's possible that some of the hundreds of display modes available for many adapters that some may not work. Stick to commonly used resolutions if possible.
 
 ## Credits
 Most of the hard work of this tool is in the Win32 interfaces to retrieve and set display settings. All of that code is based on this excellent article on C# Corner by [Mohammad Elseheimy](https://www.c-sharpcorner.com/members/mohammad-elsheimy):
