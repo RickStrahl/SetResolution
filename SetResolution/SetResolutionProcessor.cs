@@ -85,8 +85,6 @@ namespace Westwind.SetResolution
 
             ColorConsole.WriteSuccess($"Created new Profile: {profile.Name}. {profile}");
 
-            Console.WriteLine();
-
             ListProfiles();
         }
 
@@ -149,6 +147,7 @@ namespace Westwind.SetResolution
 
         private void ListDisplayModes(bool showAll = false)
         {
+            string text;
             var devices = DisplayManager.GetAllDisplayDevices();
             var monitor = devices.FirstOrDefault(d => d.IsSelected);  // main monitor
             if (CommandLine.MonitorId > 0)
@@ -159,20 +158,23 @@ namespace Westwind.SetResolution
             }
 
             var displayModes = DisplayManager.GetAllDisplaySettings(monitor.DriverDeviceName);
-            var current = DisplayManager.GetCurrentDisplaySetting();
+            var current = DisplayManager.GetCurrentDisplaySetting(monitor.DriverDeviceName);
 
-            string text = $"Current Monitor and Display Mode";
-            ColorConsole.WriteLine(text, ConsoleColor.Yellow);
-            ColorConsole.WriteLine( new string('-',  text.Length), ConsoleColor.Yellow);
-            Console.WriteLine($"{monitor.Index} {monitor.DisplayName}");
-            Console.WriteLine(current + "\n");
+            //string text = $"Current Monitor and Display Mode";
+            //ColorConsole.WriteLine(text, ConsoleColor.Yellow);
+            //ColorConsole.WriteLine( new string('-',  text.Length), ConsoleColor.Yellow);
+            //Console.WriteLine($"{monitor.Index} {monitor.DisplayName}");
+            //Console.WriteLine(current + "\n");
 
 
             ColorConsole.WriteLine("Available Monitors", ConsoleColor.Yellow);
             ColorConsole.WriteLine("------------------", ConsoleColor.Yellow);
             foreach (var device in devices)
             {
-                Console.WriteLine(device);
+                if (device.IsSelected)
+                    ColorConsole.WriteLine(device.ToString(), ConsoleColor.Green);
+                else
+                    Console.WriteLine(device);
             }
             Console.WriteLine();
 
@@ -195,7 +197,10 @@ namespace Westwind.SetResolution
 
             foreach (var set in filtered)
             {
-                Console.WriteLine(set.ToString());
+                if (set.Equals(current))
+                    ColorConsole.WriteLine(set.ToString() + " *", ConsoleColor.Green);
+                else
+                    Console.WriteLine(set.ToString());
             }
         }
 

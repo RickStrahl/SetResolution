@@ -1,16 +1,15 @@
 # Set Windows Display Resolution from Command Line
 
-This small command line utility allows you to quickly set Windows Display Resolutions to any of the available display modes for your video driver on the default Windows Screen device.
+This small command line utility allows you to quickly set Windows Display Resolutions to any of the available display modes for your Monitors.
 
 * Set explicit Display Resolution (has to match a valid display mode)
-* List all available Display Modes
+* List all available Display Modes and Monitors
 * Create and use multiple Display Mode Profiles for quick access
-
 
 > **Warning:** Use at your own risk. Setting an invalid display mode can [leave your screen inaccessible](#fark-i-set-a-resolution-that-doesnt-work-now-what). Use only with supported display modes. We check your settings against available modes and only allow those that match a driver display mode, but there may still be some modes that don't work with your monitor.
 
 ## Download
-This tool is a small, self-contained Console EXE application and you can download the `SetResolution.exe` (or `sr.exe` file directly from here):
+This tool is a small, self-contained Console EXE application. For now, you can download the `SetResolution.exe` (or `sr.exe` file directly from here):
 
 [Download SetResolution.exe](https://github.com/RickStrahl/SetResolution/raw/master/Binaries/SetResolution.exe)
 
@@ -33,7 +32,7 @@ The help information is as follows:
 Syntax:
 -------
 SetResolution  [<ProfileName>|SET|LIST|PROFILES|CREATEPROFILE]
-               -w 1920 -h 1080 -f 60 -b 32 -o 0 -la -p ProfileName
+               -w 1920 -h 1080 -f 60 -b 32 -o 0 -p ProfileName
 
 Commands:
 ---------
@@ -41,7 +40,7 @@ HELP || /?          This help display
 <ProfileName>       Run with only a Profile Name sets that display profile
 SET                 Sets Display Settings -
                     provide either a profile (-p) or display options -w/-h/-f/-b/-o
-LIST                Lists all available display modes
+LIST                Lists all available display modes and monitors
 PROFILES            Lists all saved profiles (stored in SetResolution.xml)
 CREATEPROFILE       Creates a new profile by specifying name and display options
 
@@ -52,14 +51,19 @@ Display Settings:
 -f                  Display Frequency in Hertz (60*)
 -o                  Orientation - 0 (default*), 1 (90deg), 2 (180deg), 3 (270deg)
 -p                  Profile name
--la                 List all Display modes (LIST). Default only shows current matches
+
+Command Modifiers
+-----------------
+-m                  Monitor Id  to apply command to (1,2,3 etc - use LIST to see Ids)
+                    applies to: LIST, SET. If not specified, Default monitor is used.
+-la                 List all Display modes (LIST command). Default only shows current matches
 
 Examples:
 ---------
 SetResolution MyProfile
-SetResolution SET -p MyProfile
-SetResolution SET -w 1920 -h 1080 -f 60
-SetResolution LIST
+SetResolution SET -p MyProfile -m2
+SetResolution SET -w 1920 -h 1080 -f 60 -m2
+SetResolution LIST -m2
 SetResolution PROFILES
 SetResolution CREATEPROFILE -p "My Profile" -w 1920 -h 1080 -f 60
 ```
@@ -67,13 +71,23 @@ SetResolution CREATEPROFILE -p "My Profile" -w 1920 -h 1080 -f 60
 ### Add to the Windows Path
 We recommend that you add the `SetResolution.exe` folder to your Windows path so that you can always and quickly access the application to switch resolution from anywhere.
 
-## List Display Modes
-You can list available Display Modes the `LIST` command:
+## Multi-Monitor Support
+This tool supports multiple monitors via the `-m <MonitorNumber>` command line switch. By default the **Main Windows Monitor** monitor is used - a setting which is configured in the Windows Display settings.
+
+Both the `SET` and `LIST` command support the `-m` switch to specify the monitor that the command applies to. Profile operations can also specify a monitor.
+
+The `-m` switch uses a numbering scheme from 1-n, with monitor numbers identified in the `LIST` command. The numbers also reflect the same value you see in the Windows display settings.
+
+## List Available Monitors and Display Modes
+You can use the `LIST` command to show available Monitors and Display Modes as well as the currently selected monitor and display mode. 
+
+If you don't specify the `-m` switch which selects a monitor, the default **Windows Main Monitor** is used. The list of Display Modes is specific to the selected monitor. You can explicitly select a monitor via the `-m` switch. M
+
+![](Assets/ListDisplay.png)
 
 ```powershell
-SetResolution LIST
+sr LIST -m1
 ```
-
 This shows a list of display modes available. By default the list only shows:
 
 * Sizes with the Width > 800 pixels
@@ -85,8 +99,10 @@ This list is similar to the list you see in the Windows Display Resolution drop 
 If you want to see `all display modes` use the `-la` command line switch:
 
 ```powershell
-SetResolution LIST -la
+sr LIST -m1 -la
 ```
+
+The list displays the selected monitor and display mode for this command in green and with the `*` at the end.
 
 This displays all displays modes for all sizes, orientations and frequencies. This list tends to very large with many duplicate and overlapping values. However it can be useful to match an exact display mode.
 
@@ -95,20 +111,82 @@ Use these display modes when you create new Profiles and ensure your Profile mat
 ## Profiles
 Profiles are the preferred way to switch resolutions as they give you quick access via a single profile name string, instead of having to specify all the settings individually.
 
+Profiles values stored are:
+
+* Height and Width
+* Monitor Frequency (60)
+* Color Bit Size  (32)
+* Orientation (0)
+
+<small>*values in parenthesis are optional default values if not specified*</small>
+
+> ##### Profiles do not store Monitor numbers
+> If you need to apply to a specific monitor make sure you add the `-m` switch to explicit specify the specific monitor you want to apply the profile to.
+
 Profiles are 'shortcuts' to a specific set of Display Settings with a name. You can quickly access a profile with:
 
-### Setting a Profile
-```powershell
-SetResolution SET -p <profileName>
-```
 ### Create a new Profile
 You can create a profile with:
 
 ```powershell
 SetResolution CREATEPROFILE -p <profileName> -w 1280 -h 768 -f 59
 ```
-
+#### Manually Edit SetResolution.xml
 Profiles are stored in `SetResolution.xml` in the same folder as the .exe and you can manually edit the XML file to add new profiles. In order to remove profiles you can edit the `SetResolution.xml` file.
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<AppConfiguration xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+   <Profiles>
+      <DisplayProfile>
+         <Name>1080</Name>
+         <Width>1920</Width>
+         <Height>1080</Height>
+         <Frequency>60</Frequency>
+         <BitSize>32</BitSize>
+         <Orientation>Default</Orientation>
+      </DisplayProfile>
+      <DisplayProfile>
+         <Name>4k</Name>
+         <Width>3840</Width>
+         <Height>2160</Height>
+         <Frequency>60</Frequency>
+         <BitSize>32</BitSize>
+         <Orientation>Default</Orientation>
+      </DisplayProfile>
+      <DisplayProfile>
+         <Name>1440</Name>
+         <Width>2560</Width>
+         <Height>1440</Height>
+         <Frequency>60</Frequency>
+         <BitSize>32</BitSize>
+         <Orientation>Default</Orientation>
+      </DisplayProfile>
+      <DisplayProfile>
+         <Name>720</Name>
+         <Width>1280</Width>
+         <Height>720</Height>
+         <Frequency>60</Frequency>
+         <BitSize>32</BitSize>
+         <Orientation>Default</Orientation>
+      </DisplayProfile>
+   </Profiles>
+</AppConfiguration>
+```
+
+> Yeah I know XML. But to keep out any external dependencies, XML serialization is used here :smile:
+
+### Setting a Profile
+Once a profile has been created you can invoke it.
+
+```powershell
+# Shortcut way - on monitor 2
+SetResolution <profileName> -m2
+
+# Full syntax - on main monitor (not specified)
+SetResolution SET -p <profileName> 
+```
+
 
 ### Default Profiles
 A number of default profiles are added for common 16:9 resolutions @ 60hz which is most common:

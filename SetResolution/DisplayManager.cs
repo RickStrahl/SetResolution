@@ -1,10 +1,16 @@
 ﻿/*
- * Original code based on:
+ * Based on original code from:
  *
  * (c) Mohammad Elsheimy
  * Changing Display Settings Programmatically
  *
  * https://www.c-sharpcorner.com/uploadfile/GemingLeader/changing-display-settings-programmatically/
+ *
+ * Added support for:
+ *
+ * * Listing Monitors and Monitor specific display modes
+ * * Set display mode for a specific monitor/driver
+ *
 */
 
 using System;
@@ -44,12 +50,8 @@ namespace Westwind.SetResolution
             mode.dmBitsPerPel = (uint)set.BitCount;
             mode.dmDisplayFrequency = (uint)set.Frequency;
            
-
-
-            //DisplayChangeResult result = (DisplayChangeResult)DisplayManagerNative.ChangeDisplaySettings(ref mode, 0);
             DisplayChangeResult result = (DisplayChangeResult)DisplayManagerNative.ChangeDisplaySettingsEx(deviceName, ref mode, IntPtr.Zero,  0, IntPtr.Zero);
-
-
+            
             string msg = null;
             switch (result)
             {
@@ -85,9 +87,9 @@ namespace Westwind.SetResolution
         /// Returns the current display mode setting
         /// </summary>
         /// <returns></returns>
-        public static DisplaySettings GetCurrentDisplaySetting()
+        public static DisplaySettings GetCurrentDisplaySetting(string deviceName = null)
         {
-            var mode = GetDeviceMode();
+            var mode = GetDeviceMode(deviceName);
             return CreateDisplaySettingsObject(0, mode);
         }
 
@@ -166,7 +168,7 @@ namespace Westwind.SetResolution
 
             public override string ToString()
             {
-                return $"{Index} {DisplayName}{(IsPrimary ? " (main)" : "")}{(IsSelected ? " (selected)" :"")}";
+                return $"{Index} {DisplayName}{(IsSelected ? " *" : "")}{(IsPrimary ? " (Main)" : "")}";
             }
         }
 
@@ -266,6 +268,22 @@ namespace Westwind.SetResolution
         {
             return string.Format(System.Globalization.CultureInfo.CurrentCulture,
                 $"{Width} x {Height}, {BitCount} Bit, {Frequency} Hertz, {Orientation}");
+        }
+
+        public override bool Equals(object d)
+        {
+            var disp = d as DisplaySettings;
+            return (disp.Width == Width && disp.Height == Height &&
+                    disp.Frequency == Frequency &&
+                    disp.BitCount == BitCount &&
+                    disp.Orientation == Orientation);
+        }
+
+
+        public override int GetHashCode()
+        {
+            return ("" + "W" + Width + "H" + Height + "F" + Frequency + "B" + BitCount + "O" + Orientation)
+                .GetHashCode();
         }
     }
 
