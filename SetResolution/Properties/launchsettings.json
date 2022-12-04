@@ -2,8 +2,7 @@
   "profiles": {
     "SetResolution": {
       "commandName": "Project",
-      "commandLineArgs": "LIST"
-    }
+      "commandLineArgs": "LIST -m 1"
     }
   }
 }

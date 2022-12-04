@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using HtmlPackager.ConsoleApp;
 
 namespace Westwind.SetResolution
@@ -28,6 +29,8 @@ namespace Westwind.SetResolution
         public bool ShowResolutions { get; set; }
         public bool ListAll { get; set; }
 
+        public int MonitorId { get; set; }
+
 
         public SetResolutionCommandLineParser(string[] args = null, string cmdLine = null)
             : base(args, cmdLine)
@@ -44,7 +47,8 @@ namespace Westwind.SetResolution
             Orientation = (Orientation) or;
             ListAll = ParseParameterSwitch("-la");
 
-            Profile = ParseStringParameterSwitch("-p");
+            Profile = ParseStringParameterSwitch("-p"); 
+            MonitorId = ParseIntParameterSwitch("-m");
 
             Help = ParseParameterSwitch("-h");
         }
