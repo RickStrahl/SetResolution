@@ -7,6 +7,36 @@ This small command line utility allows you to quickly set Windows Display Resolu
 * Create and use Display Mode Profiles for quick access
 
 > **Warning:** Use at your own risk. Setting an invalid display mode can [leave your screen inaccessible](#fark-i-set-a-resolution-that-doesnt-work-now-what). Use only with supported display modes. We check your settings against available modes and only allow those that match a driver display mode, but there may still be some modes that don't work with your monitor.
+  
+## Basic Usage
+Most common usage is via a pre-defined profile name:
+
+```powershell
+# Set to a profile named 1080 on default monitor
+SetResolution 1080
+
+# or shortcut version (sr.exe) on Monitor 2
+sr 4k -m2 
+```
+
+Alternately you can explicitly pick a resolution, frequency, bit rate and Orientation:
+
+```powershell
+sr SET -w 2560 -h 1600 -f 60 -b 32 -o 0 
+```
+*Frequency, BitRate and Orientation are optional*
+
+To see all resolutions:
+
+```powershell
+sr LIST -m1
+```
+
+To create a new profile:
+
+```powershell
+sr CREATEPROFILE -w 2560 -h 1600 -f 60 -b 32 -o 0 
+```
 
 ## Installation
 You can install this tool in a couple of ways (for now).
@@ -31,24 +61,6 @@ dotnet tool install -g SetResolution
 dotnet tool update -g SetResolution
 ```
 
-## Basic Usage
-Most common usage is with a pre-defined profile name:
-
-```powershell
-# Set to a profile named 1080
-SetResolution 1080
-
-# or shortcut version (sr.exe)
-sr 4k
-```
-
-Alternately you can explicitly pick a resolution, frequency, bit rate and Orientation:
-
-```powershell
-sr SET -w 2560 -h 1600 -f 60 -b 32 -o 0
-```
-
-*Frequency, BitRate and Orientation are optional.*
 
 ### Full Syntax
 To show available syntax, run `SetResolution.exe` or `sr.exe` without any parameters or `/?` or `HELP`. 
@@ -94,16 +106,18 @@ SetResolution PROFILES
 SetResolution CREATEPROFILE -p "My Profile" -w 1920 -h 1080 -f 60
 ```
 ## Multi-Monitor Support
-This tool supports multiple monitors via the `-m <MonitorNumber>` command line switch. By default the **Main Windows Monitor** monitor is used - a setting which is configured in the Windows Display settings.
+This tool supports multiple monitors via the `-m <MonitorNumber>` command line switch. By default the **Main Windows Monitor** monitor is used which corresponds to the **Main Monitor** setting configured in the Windows Display settings.
 
-Both the `SET` and `LIST` command support the `-m` switch to specify the monitor that the command applies to. Profile operations can also specify a monitor.
+Both the `SET` and `LIST` command support the `-m` switch to specify the monitor that the command applies to. Profile operations do not specify a monitor.
 
-The `-m` switch uses a numbering scheme from 1-n, with monitor numbers identified in the `LIST` command. The numbers also reflect the same value you see in the Windows display settings.
+The `-m` switch uses a numbering scheme from 1-n, with monitor numbers identified in the `LIST` command. The numbers also reflect the same value you see in the Windows Display Settings dialog.
 
 ## List Available Monitors and Display Modes
-You can use the `LIST` command to show available Monitors and Display Modes as well as the currently selected monitor and display mode. 
+You can use the `LIST` command to show available Monitors and Display Modes as well as the currently selected monitor and display mode. The display modes available are specific for the Monitor/Video Driver combination that is active.
 
-If you don't specify the `-m` switch which selects a monitor, the default **Windows Main Monitor** is used. The list of Display Modes is specific to the selected monitor. You can explicitly select a monitor via the `-m` switch. M
+If you don't specify the `-m` switch which selects a monitor, the **Windows Main Monitor** is used. The list of Display Modes is always specific to the selected monitor. You can explicitly select a monitor via the `-m` switch. 
+
+The selected monitor and display mode are highlighted in the list (green and *).
 
 ![](Assets/ListDisplay.png)
 
@@ -118,7 +132,7 @@ This shows a list of display modes available. By default the list only shows:
 
 This list is similar to the list you see in the Windows Display Resolution drop down list.
 
-If you want to see `all display modes` use the `-la` command line switch:
+If you want to see `all display modes` available for your monitor/video driver combination use the `-la` command line switch:
 
 ```powershell
 sr LIST -m1 -la
