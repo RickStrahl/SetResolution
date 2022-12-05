@@ -1,4 +1,8 @@
+# build exe (net472)
 dotnet build -c Release
+
+# build dotnet tool (net6.0)
+dotnet build -c Release /p:DefineConstants="BUILD_DOTNET_TOOL"
 
 copy .\bin\Release\net472\SetResolution.exe ..\Binaries
 

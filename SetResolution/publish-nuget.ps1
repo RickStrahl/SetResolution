@@ -7,7 +7,7 @@ if (test-path ./nupkg) {
     remove-item ./nupkg -Force -Recurse
 }   
 
-dotnet build -c Release
+dotnet build -c Release /p:DefineConstants="BUILD_DOTNET_TOOL"
 
 $filename = gci "./nupkg/*.nupkg" | sort LastWriteTime | select -last 1 | select -ExpandProperty "Name"
 Write-host $filename

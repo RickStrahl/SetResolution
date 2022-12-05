@@ -1,8 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <!--<DefineConstants>BUILD_DOTNET_TOOL</DefineConstants>-->
-
+    <!-- 
+      Pass in via dotnet build /p:DefineConstants="BUILD_DOTNET_TOOL"
+      <DefineConstants>BUILD_DOTNET_TOOL</DefineConstants> 
+    -->
     <OutputType>Exe</OutputType>
     <Version>0.1.2</Version>
     <AssemblyName>SetResolution</AssemblyName>

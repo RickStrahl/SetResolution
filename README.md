@@ -9,7 +9,7 @@ This small command line utility allows you to quickly set Windows Display Resolu
 > **Warning:** Use at your own risk. Setting an invalid display mode can [leave your screen inaccessible](#fark-i-set-a-resolution-that-doesnt-work-now-what). Use only with supported display modes. We check your settings against available modes and only allow those that match a driver display mode, but there may still be some modes that don't work with your monitor.
 
 ## Installation
-You can install this tool in a couple of ways.
+You can install this tool in a couple of ways (for now).
 
 ### Download Single-File EXE Binary
 This tool is a small, self-contained Console EXE application. For now, you can download the `SetResolution.exe` (or `sr.exe` file directly from here):
