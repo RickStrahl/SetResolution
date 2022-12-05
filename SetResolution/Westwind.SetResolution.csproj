@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <DefineConstants>BUILD_EXE</DefineConstants>
     <!--<DefineConstants>BUILD_DOTNET_TOOL</DefineConstants>-->
 
     <OutputType>Exe</OutputType>
@@ -42,7 +41,7 @@
 
 
   <!-- Dotnet Tool Specific settings -->
-  <PropertyGroup Condition="$(DefineConstants.Contains('BUILD_EXE'))">
+  <PropertyGroup Condition="$(DefineConstants.Contains('BUILD_DOTNET_TOOL')) == false">
     <!-- build for .NET Framework so there are no dependencies -->
     <TargetFramework>net472</TargetFramework>
   </PropertyGroup>
