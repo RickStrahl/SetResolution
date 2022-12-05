@@ -51,7 +51,7 @@ I recommend you copy to a folder location that is in your Windows path or add it
 ### Install as Dotnet Tool (.NET 6.0 SDK required)
 For .NET developers the easiest way to install and keep the tool up to date is via Dotnet Tool installation. This requires that the [.NET 6.0 (or later) SDK](https://dotnet.microsoft.com/en-us/download).
 
-You can install it with:
+You can install, update and use it with:
 
 ```powershell
 # install
