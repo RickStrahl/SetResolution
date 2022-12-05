@@ -1,18 +1,15 @@
 # Set Windows Display Resolution from Command Line
 
-This small command line utility allows you to quickly set Windows Display Resolutions to any of the available display modes for your Monitors.
+This small command line utility allows you to quickly set Windows Display Resolutions to any of the available display modes available for your active Monitors or virtual display devices. It allows you to:
 
-* Set explicit Display Resolution (has to match a valid display mode)
+* Set an explicit Display Resolution
 * List all available Display Modes and Monitors
-* Create and use multiple Display Mode Profiles for quick access
+* Create and use Display Mode Profiles for quick access
 
 > **Warning:** Use at your own risk. Setting an invalid display mode can [leave your screen inaccessible](#fark-i-set-a-resolution-that-doesnt-work-now-what). Use only with supported display modes. We check your settings against available modes and only allow those that match a driver display mode, but there may still be some modes that don't work with your monitor.
 
 ## Installation
-You can install this tool in a couple of ways (for now):
-
-* Download and run the Single File Binary EXE
-* Install the Dotnet Tool
+You can install this tool in a couple of ways.
 
 ### Download Single-File EXE Binary
 This tool is a small, self-contained Console EXE application. For now, you can download the `SetResolution.exe` (or `sr.exe` file directly from here):
@@ -34,9 +31,8 @@ dotnet tool install -g SetResolution
 dotnet tool update -g SetResolution
 ```
 
-## Usage
-
-Most common usage is with a pre-define profile name:
+## Basic Usage
+Most common usage is with a pre-defined profile name:
 
 ```powershell
 # Set to a profile named 1080
@@ -45,7 +41,16 @@ SetResolution 1080
 # or shortcut version (sr.exe)
 sr 4k
 ```
-## Syntax
+
+Alternately you can explicitly pick a resolution, frequency, bit rate and Orientation:
+
+```powershell
+sr SET -w 2560 -h 1600 -f 60 -b 32 -o 0
+```
+
+*Frequency, BitRate and Orientation are optional.*
+
+### Full Syntax
 To show available syntax, run `SetResolution.exe` or `sr.exe` without any parameters or `/?` or `HELP`. 
 The help information is as follows:
 
@@ -88,10 +93,6 @@ SetResolution LIST -m2
 SetResolution PROFILES
 SetResolution CREATEPROFILE -p "My Profile" -w 1920 -h 1080 -f 60
 ```
-
-### Add to the Windows Path
-We recommend that you add the `SetResolution.exe` folder to your Windows path so that you can always and quickly access the application to switch resolution from anywhere.
-
 ## Multi-Monitor Support
 This tool supports multiple monitors via the `-m <MonitorNumber>` command line switch. By default the **Main Windows Monitor** monitor is used - a setting which is configured in the Windows Display settings.
 
