@@ -57,10 +57,12 @@ You can install it with:
 # install
 dotnet tool install -g SetResolution
 
+# Use it
+SetResolution 1080 -m2
+
 #update
 dotnet tool update -g SetResolution
 ```
-
 
 ### Full Syntax
 To show available syntax, run `SetResolution.exe` or `sr.exe` without any parameters or `/?` or `HELP`. 
