@@ -8,12 +8,33 @@ This small command line utility allows you to quickly set Windows Display Resolu
 
 > **Warning:** Use at your own risk. Setting an invalid display mode can [leave your screen inaccessible](#fark-i-set-a-resolution-that-doesnt-work-now-what). Use only with supported display modes. We check your settings against available modes and only allow those that match a driver display mode, but there may still be some modes that don't work with your monitor.
 
-## Download
+## Installation
+You can install this tool in a couple of ways (for now):
+
+* Download and run the Single File Binary EXE
+* Install the Dotnet Tool
+
+### Download Single-File EXE Binary
 This tool is a small, self-contained Console EXE application. For now, you can download the `SetResolution.exe` (or `sr.exe` file directly from here):
 
 [Download SetResolution.exe](https://github.com/RickStrahl/SetResolution/raw/master/Binaries/SetResolution.exe)
 
-I recommend you copy to a folder location that is in your Windows path or add it to your path, so you can run `SetResoltion` from any location.
+I recommend you copy to a folder location that is in your Windows path or add it to your path, so you can run `SetResolution` from any location.
+
+### Install as Dotnet Tool (.NET 6.0 SDK required)
+For .NET developers the easiest way to install and keep the tool up to date is via Dotnet Tool installation. This requires that the [.NET 6.0 (or later) SDK](https://dotnet.microsoft.com/en-us/download).
+
+You can install it with:
+
+```powershell
+# install
+dotnet tool install -g SetResolution
+
+#update
+dotnet tool update -g SetResolution
+```
+
+## Usage
 
 Most common usage is with a pre-define profile name:
 

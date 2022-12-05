@@ -1,39 +1,61 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <DefineConstants>BUILD_EXE</DefineConstants>
+    <!--<DefineConstants>BUILD_DOTNET_TOOL</DefineConstants>-->
+
     <OutputType>Exe</OutputType>
-    <TargetFramework>net472</TargetFramework>
     <Version>0.1.2</Version>
     <AssemblyName>SetResolution</AssemblyName>
     <Namespace>Westwind.SetResolution</Namespace>
-
     <ProductName>Set Windows Display Resolution</ProductName>
-    <Title>Set Resolution - Set Windows Display Resolution from Terminal</Title>
+    <Title>SetResolution: Set Windows Display Resolution from Terminal</Title>
     <Description>
-      Allows you set Windows display Resolution from the Terminal via simple commands. You can:
-      * set to a specific resolution, frequency, bitness and rotation
-      * list all available display modes
-      * create and use profiles for easy access
+      Allows you set Windows display Resolution from the Terminal via simple commands. 
+      
+      Using this tool you can:
+
+      * Set a specific resolution, frequency, bitness and rotation
+      * List all available display modes
+      * Create and use profiles for easy access
+      * Supports multiple Monitors
     </Description>
+    <Authors>Rick Strahl, West Wind Technologies</Authors>
     <Copyright>West Wind Technologies, 2022-2023</Copyright>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Window\" />
-  </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Window\" />
+  
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
+  
     <EmbeddedResource Update="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 
+
+  <!-- Dotnet Tool Specific settings -->
+  <PropertyGroup Condition="$(DefineConstants.Contains('BUILD_EXE'))">
+    <!-- build for .NET Framework so there are no dependencies -->
+    <TargetFramework>net472</TargetFramework>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="$(DefineConstants.Contains('BUILD_DOTNET_TOOL'))">
+    <!-- dotnet tools must build to .NET Core -->
+    <TargetFramework>net6.0</TargetFramework>
+    
+    <PackAsTool>true</PackAsTool>
+    <PackageId>setresolution</PackageId>
+    <ToolCommandName>setresolution</ToolCommandName>
+
+    <PackageOutputPath>./nupkg</PackageOutputPath>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
 </Project>
