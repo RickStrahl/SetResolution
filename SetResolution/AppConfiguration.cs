@@ -62,7 +62,7 @@ namespace Westwind.SetResolution
             var file = Path.Combine(Program.StartupPath, "SetResolution.xml");
             try
             {
-                SerializationUtils.SerializeObject(Current, file, false);
+                SerializationUtils.SerializeObject(Current, file);
             }
             catch
             {

@@ -12,7 +12,7 @@ This small command line utility allows you to quickly set Windows Display Resolu
 
 > **Use at your own risk.** Setting an invalid display mode can [leave your screen inaccessible](#fark-i-set-a-resolution-that-doesnt-work-now-what). Use only with supported display modes. 
 >
-> For safety we ask for a key press to accept, after changing mode by default. You can override the key requirement with `-noprompt`.
+> For safety we ask for a key press to accept, after changing mode by default. You can override prompt requirement with `-noprompt`.
   
 ## Basic Usage
 Most common usage is via a pre-defined profile name:
@@ -24,6 +24,15 @@ SetResolution 1080
 # or shortcut version (sr.exe) on Monitor 2
 sr 4k -m2 
 ```
+
+We ship a few default profiles:
+
+* 4k
+* 1080
+* 1440
+* 720
+
+but you can also edit these or create your own named profiles.
 
 Alternately you can explicitly pick a resolution, frequency, bit rate and Orientation:
 
@@ -78,46 +87,8 @@ dotnet tool update -g SetResolution
 To show available syntax, run `SetResolution.exe` or `sr.exe` without any parameters or `/?` or `HELP`. 
 The help information is as follows:
 
-```text
-Syntax:
--------
-SetResolution  [<ProfileName>|SET|LIST|PROFILES|CREATEPROFILE]
-               -w 1920 -h 1080 -f 60 -b 32 -o 0 -p ProfileName
+![](Assets/HelpScreen.png)
 
-Commands:
----------
-HELP || /?          This help display
-<ProfileName>       Run with only a Profile Name sets that display profile
-SET                 Sets Display Settings -
-                    provide either a profile (-p) or display options -w/-h/-f/-b/-o
-LIST                Lists all available display modes and monitors
-PROFILES            Lists all saved profiles (stored in SetResolution.xml)
-CREATEPROFILE       Creates a new profile by specifying name and display options
-
-Display Settings:
------------------
--w                  Display Width
--h                  Display Height
--f                  Display Frequency in Hertz (60*)
--o                  Orientation - 0 (default*), 1 (90deg), 2 (180deg), 3 (270deg)
--p                  Profile name
--noprompt           Don't prompt for confirmation
-
-Command Modifiers
------------------
--m                  Monitor Id  to apply command to (1,2,3 etc - use LIST to see Ids)
-                    applies to: LIST, SET. If not specified, Default monitor is used.
--la                 List all Display modes (LIST command). Default only shows current matches
-
-Examples:
----------
-SetResolution MyProfile
-SetResolution SET -p MyProfile -m2
-SetResolution SET -w 1920 -h 1080 -f 60 -m2
-SetResolution LIST -m2
-SetResolution PROFILES
-SetResolution CREATEPROFILE -p "My Profile" -w 1920 -h 1080 -f 60
-```
 ## Multi-Monitor Support
 This tool supports multiple monitors via the `-m <MonitorNumber>` command line switch. By default the **Main Windows Monitor** monitor is used which corresponds to the **Main Monitor** setting configured in the Windows Display settings.
 

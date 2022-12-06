@@ -1,8 +1,8 @@
-#region License
+﻿#region License
 /*
  **************************************************************
  *  Author: Rick Strahl 
- *          � West Wind Technologies, 2008 - 2009
+ *          © West Wind Technologies, 2008 - 2009
  *          http://www.west-wind.com/
  * 
  * Created: 09/08/2008
@@ -57,58 +57,37 @@ namespace Westwind.Utilities
         /// <param name="fileName"></param>
         /// <param name="binarySerialization">determines whether XML serialization or binary serialization is used</param>
         /// <returns></returns>
-        public static bool SerializeObject(object instance, string fileName, bool binarySerialization)
+        public static bool SerializeObject(object instance, string fileName)
         {
             bool retVal = true;
 
-            if (!binarySerialization)
+            XmlTextWriter writer = null;
+            try
             {
-                XmlTextWriter writer = null;
-                try
-                {
-                    XmlSerializer serializer =
-                        new XmlSerializer(instance.GetType());
+                XmlSerializer serializer =
+                    new XmlSerializer(instance.GetType());
 
-                    // Create an XmlTextWriter using a FileStream.
-                    Stream fs = new FileStream(fileName, FileMode.Create);
-                    writer = new XmlTextWriter(fs, new UTF8Encoding());
-                    writer.Formatting = Formatting.Indented;
-                    writer.IndentChar = ' ';
-                    writer.Indentation = 3;
+                // Create an XmlTextWriter using a FileStream.
+                Stream fs = new FileStream(fileName, FileMode.Create);
+                writer = new XmlTextWriter(fs, new UTF8Encoding());
+                writer.Formatting = Formatting.Indented;
+                writer.IndentChar = ' ';
+                writer.Indentation = 3;
 
-                    // Serialize using the XmlTextWriter.
-                    serializer.Serialize(writer, instance);
-                }
-                catch(Exception ex)
-                {
-                    Debug.Write("SerializeObject failed with : " + ex.Message, "West Wind");
-                    retVal = false;
-                }
-                finally
-                {
-                    if (writer != null)
-                        writer.Close();
-                }
+                // Serialize using the XmlTextWriter.
+                serializer.Serialize(writer, instance);
             }
-            else
+            catch (Exception ex)
             {
-                Stream fs = null;
-                try
-                {
-                    BinaryFormatter serializer = new BinaryFormatter();
-                    fs = new FileStream(fileName, FileMode.Create);
-                    serializer.Serialize(fs, instance);
-                }
-                catch
-                {
-                    retVal = false;
-                }
-                finally
-                {
-                    if (fs != null)
-                        fs.Close();
-                }
+                Debug.Write("SerializeObject failed with : " + ex.Message, "West Wind");
+                retVal = false;
             }
+            finally
+            {
+                if (writer != null)
+                    writer.Close();
+            }
+
 
             return retVal;
         }
@@ -196,41 +175,6 @@ namespace Westwind.Utilities
 
 
         /// <summary>
-        /// Serializes an object instance to a file.
-        /// </summary>
-        /// <param name="instance">the object instance to serialize</param>
-        /// <param name="Filename"></param>
-        /// <param name="BinarySerialization">determines whether XML serialization or binary serialization is used</param>
-        /// <returns></returns>
-        public static bool SerializeObject(object instance, out byte[] resultBuffer, bool throwExceptions = false)
-        {
-            bool retVal = true;
-
-            MemoryStream ms = null;
-            try
-            {
-                BinaryFormatter serializer = new BinaryFormatter();
-                ms = new MemoryStream();
-                serializer.Serialize(ms, instance);
-            }
-            catch(Exception ex)
-            {                
-                Debug.Write("SerializeObject failed with : " + ex.GetBaseException().Message, "West Wind");
-                retVal = false;
-
-                if (throwExceptions)
-                    throw;
-            }
-            finally
-            {
-                if (ms != null)
-                    ms.Close();
-            }
-
-            resultBuffer = ms.ToArray();
-
-            return retVal;
-        }
 
         /// <summary>
         /// Serializes an object to an XML string. Unlike the other SerializeObject overloads
@@ -255,29 +199,9 @@ namespace Westwind.Utilities
             return xmlResultString;
         }
 
-        public static byte[] SerializeObjectToByteArray(object instance, bool throwExceptions = false)
-        {
-            byte[] byteResult = null;
-
-            if ( !SerializeObject(instance, out byteResult) )
-                return null;
-                        
-            return byteResult;
-        }
 
 
-
-                /// <summary>
-        /// Deserializes an object from file and returns a reference.
-        /// </summary>
-        /// <param name="fileName">name of the file to serialize to</param>
-        /// <param name="objectType">The Type of the object. Use typeof(yourobject class)</param>
-        /// <param name="binarySerialization">determines whether we use Xml or Binary serialization</param>
-        /// <returns>Instance of the deserialized object or null. Must be cast to your object type</returns>
-        public static object DeSerializeObject(string fileName, Type objectType, bool binarySerialization)
-        {
-            return DeSerializeObject(fileName, objectType, binarySerialization, false);
-        }
+         
 
         /// <summary>
         /// Deserializes an object from file and returns a reference.
@@ -287,12 +211,10 @@ namespace Westwind.Utilities
         /// <param name="binarySerialization">determines whether we use Xml or Binary serialization</param>
         /// <param name="throwExceptions">determines whether failure will throw rather than return null on failure</param>
         /// <returns>Instance of the deserialized object or null. Must be cast to your object type</returns>
-        public static object DeSerializeObject(string fileName, Type objectType, bool binarySerialization, bool throwExceptions)
+        public static object DeSerializeObject(string fileName, Type objectType,  bool throwExceptions)
         {
             object instance = null;
 
-            if (!binarySerialization)
-            {
 
                 XmlReader reader = null;
                 XmlSerializer serializer = null;
@@ -324,29 +246,7 @@ namespace Westwind.Utilities
                     if (reader != null)
                         reader.Close();
                 }
-            }
-            else
-            {
-
-                BinaryFormatter serializer = null;
-                FileStream fs = null;
-
-                try
-                {
-                    serializer = new BinaryFormatter();
-                    fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
-                    instance = serializer.Deserialize(fs);
-                }
-                catch
-                {
-                    return null;
-                }
-                finally
-                {
-                    if (fs != null)
-                        fs.Close();
-                }
-            }
+            
 
             return instance;
         }
@@ -370,42 +270,6 @@ namespace Westwind.Utilities
         {
             XmlTextReader reader = new XmlTextReader(xml, XmlNodeType.Document, null);
             return DeSerializeObject(reader, objectType);
-        }
-
-        /// <summary>
-        /// Deseializes a binary serialized object from  a byte array
-        /// </summary>
-        /// <param name="buffer"></param>
-        /// <param name="objectType"></param>
-        /// <param name="throwExceptions"></param>
-        /// <returns></returns>
-        public static object DeSerializeObject(byte[] buffer, Type objectType, bool throwExceptions = false)
-        {
-            BinaryFormatter serializer = null;
-            MemoryStream ms = null;
-            object Instance = null;
-
-            try
-            {
-                serializer = new BinaryFormatter();
-                ms = new MemoryStream(buffer);
-                Instance = serializer.Deserialize(ms);
-
-            }
-            catch
-            {
-                if (throwExceptions)
-                    throw;
-
-                return null;
-            }
-            finally
-            {
-                if (ms != null)
-                    ms.Close();
-            }
-
-            return Instance;
         }
 
 

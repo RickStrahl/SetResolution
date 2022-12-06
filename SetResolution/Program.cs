@@ -30,26 +30,19 @@ namespace Westwind.SetResolution
             if (args == null || args.Length == 0 || args[0] == "HELP" || args[0] == "/?")
             {
 
-                Console.WriteLine("\nSet Display Resolution to any of the available machine display mode.");
+                Console.WriteLine("\nSet Monitor Display Resolution to any available machine display mode.");
 
 
                 string options = $@"
-Syntax:
--------
-SetResolution  [<ProfileName>|SET|LIST|PROFILES|CREATEPROFILE]
-               -w 1920 -h 1080 -f 60 -b 32 -o 0 -p ProfileName 
-";
+[cyan]Syntax[/cyan]
+------
+[yellow]SetResolution  <ProfileName>|SET|LIST|PROFILES|CREATEPROFILE
+               -w 1920 -h 1080 -f 60 -b 32 -o 0 -p ProfileName[/yellow]
 
-                Console.WriteLine(options);
-
-                ColorConsole.WriteWarning(
-                    "Warning: Setting an invalid mode may leave your screen unaccessible. Only pick supported modes.");
-
-                options = $@"
-Commands:
----------
+[cyan]Commands[/cyan]
+--------
 HELP || /?          This help display
-<ProfileName>       Run with only a Profile Name sets that display profile
+<ProfileName>       Apply Display settings from a named Profile 
 SET                 Sets Display Settings - 
                     provide either a profile (-p) or display options -w/-h/-f/-b/-o
 LIST                Lists all available display modes and monitors
@@ -57,8 +50,8 @@ PROFILES            Lists all saved profiles (stored in SetResolution.xml)
 CREATEPROFILE       Creates a new profile by specifying name and display options
                     - {Path.Combine(StartupPath,"SetResolution.xml")}
 
-Display Settings:
------------------
+[cyan]Display Settings[/cyan]
+----------------
 -w                  Display Width
 -h                  Display Height
 -f                  Display Frequency in Hertz (60*)
@@ -66,22 +59,22 @@ Display Settings:
 -p                  Profile name
 -noprompt           Don't prompt for confirmation of new settings
 
-Command Modifiers
+[cyan]Command Modifiers[/cyan]
 -----------------
 -m                  Monitor Id  to apply command to (1,2,3 etc - use LIST to see Ids)
                     applies to: LIST, SET. If not specified, Default monitor is used.
 -la                 List all Display modes (LIST command). Default only shows current matches
 
-Examples:
----------
+[cyan]Examples[/cyan]
+--------
 SetResolution MyProfile
 SetResolution SET -p MyProfile -m2
-SetResolution SET -w 1920 -h 1080 -f 60 -m2
+SetResolution SET -w 1920 -h 1080 -f 60 -m2 -noprompt
 SetResolution LIST -m2
 SetResolution PROFILES
 SetResolution CREATEPROFILE -p ""My Profile"" -w 1920 -h 1080 -f 60
 ";
-                Console.WriteLine(options);
+                ColorConsole.WriteEmbeddedColorLine(options);
             }
             else
             {
