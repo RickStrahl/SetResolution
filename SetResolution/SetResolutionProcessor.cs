@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Westwind.SetResolution.CommandLine;
 
 namespace Westwind.SetResolution
@@ -92,6 +93,8 @@ namespace Westwind.SetResolution
         {
             var devices = DisplayManager.GetAllDisplayDevices();
             var monitor = devices.FirstOrDefault(d => d.IsSelected);  // main monitor
+            var currentSettings = DisplayManager.GetCurrentDisplaySetting();
+
             if (CommandLine.MonitorId > 0)
             {
                 monitor = devices.FirstOrDefault(d => d.Index == CommandLine.MonitorId);
@@ -143,6 +146,31 @@ namespace Westwind.SetResolution
 
             DisplayManager.SetDisplaySettings(set, monitor.DriverDeviceName);
             ColorConsole.WriteSuccess("Switched Display Mode to " + set.ToString());
+
+            if (!CommandLine.NoPrompt)
+            {
+                ColorConsole.WriteLine("\npress any key to confirm new resolution within 5 seconds: ");
+                bool keyPressed = false;
+                for (int i = 0; i < 55; i++)
+                {
+                    Thread.Sleep(100);
+                    if (Console.KeyAvailable)
+                    {
+                        keyPressed = true;
+                        break;
+                    }
+                }
+
+                if (!keyPressed)
+                {
+                    ColorConsole.WriteWarning("No key pressed: Resetting Display Mode to previous settings.");
+                    DisplayManager.SetDisplaySettings(currentSettings, deviceName: monitor.DriverDeviceName);
+                }
+                else
+                {
+                    ColorConsole.WriteSuccess("Successfully changed resolution.");
+                }
+            }
         }
 
         private void ListDisplayModes(bool showAll = false)

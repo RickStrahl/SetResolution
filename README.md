@@ -6,7 +6,10 @@ This small command line utility allows you to quickly set Windows Display Resolu
 * List all available Display Modes and Monitors
 * Create and use Display Mode Profiles for quick access
 
-> **Warning:** Use at your own risk. Setting an invalid display mode can [leave your screen inaccessible](#fark-i-set-a-resolution-that-doesnt-work-now-what). Use only with supported display modes. We check your settings against available modes and only allow those that match a driver display mode, but there may still be some modes that don't work with your monitor.
+
+> **Use at your own risk.** Setting an invalid display mode can [leave your screen inaccessible](#fark-i-set-a-resolution-that-doesnt-work-now-what). Use only with supported display modes. 
+>
+> For safety we ask for a key press to accept, after changing mode by default. You can override the key requirement with `-noprompt`.
   
 ## Basic Usage
 Most common usage is via a pre-defined profile name:
@@ -95,6 +98,7 @@ Display Settings:
 -f                  Display Frequency in Hertz (60*)
 -o                  Orientation - 0 (default*), 1 (90deg), 2 (180deg), 3 (270deg)
 -p                  Profile name
+-noprompt           Don't prompt for confirmation
 
 Command Modifiers
 -----------------

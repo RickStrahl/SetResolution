@@ -64,6 +64,7 @@ Display Settings:
 -f                  Display Frequency in Hertz (60*)
 -o                  Orientation - 0 (default*), 1 (90deg), 2 (180deg), 3 (270deg)
 -p                  Profile name
+-noprompt           Don't prompt for confirmation of new settings
 
 Command Modifiers
 -----------------
