@@ -6,6 +6,7 @@ This small command line utility allows you to quickly set Windows Display Resolu
 * List all available Display Modes and Monitors
 * Create and use Display Mode Profiles for quick access
 
+![](Assets/SetResolutionMain.png)
 
 > **Use at your own risk.** Setting an invalid display mode can [leave your screen inaccessible](#fark-i-set-a-resolution-that-doesnt-work-now-what). Use only with supported display modes. 
 >
