@@ -41,7 +41,7 @@ sr SET -w 2560 -h 1600 -f 60 -b 32 -o 0
 ```
 *Frequency, BitRate and Orientation are optional*
 
-To see recommended resolutions for a specific monitor:
+To see available resolutions for a specific monitor:
 
 ```powershell
 # default list is filtered to current frequency/bitrate/orientation
