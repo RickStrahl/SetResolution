@@ -3,8 +3,10 @@
 This small command line utility allows you to quickly set Windows Display Resolutions to any of the available display modes available for your active Monitors or virtual display devices. It allows you to:
 
 * Set an explicit Display Resolution
-* List all available Display Modes and Monitors
 * Create and use Display Mode Profiles for quick access
+* List all available Display Modes and Monitors
+* Supports multiple Monitors
+* Prompts for confirmation by default to avoid invalid display modes
 
 ![](Assets/SetResolutionMain.png)
 
