@@ -129,9 +129,14 @@ This displays all displays modes for all sizes, orientations and frequencies. Th
 Use these display modes when you create new Profiles and ensure your Profile matches the Display Modes that are supported.
 
 ## Profiles
-Profiles are the preferred way to switch resolutions as they give you quick access via a single profile name string, instead of having to specify all the settings individually.
+Profiles are 'shortcuts' to a specific set of saved Display Settings with a name that you can access simply by specifying the profile name:
 
-Profiles values stored are:
+```powershell
+sr <profileName>  -m1
+```
+Profiles are the preferred way to switch resolutions as they give you quick access via a single profile name string, instead of having to specify all the settings individually. The `-m1` switch specifies the monitor to apply to - if not specified the Main Windows Monitor is used.
+
+A Profile stores the following values:
 
 * Height and Width
 * Monitor Frequency (60)
@@ -143,16 +148,14 @@ Profiles values stored are:
 > ##### Profiles do not store Monitor numbers
 > If you need to apply to a specific monitor make sure you add the `-m` switch to explicit specify the specific monitor you want to apply the profile to.
 
-Profiles are 'shortcuts' to a specific set of Display Settings with a name. You can quickly access a profile with:
-
-### Create a new Profile
+ ### Create a new Profile
 You can create a profile with:
 
 ```powershell
 SetResolution CREATEPROFILE -p <profileName> -w 1280 -h 768 -f 59
 ```
 #### Manually Edit SetResolution.xml
-Profiles are stored in `SetResolution.xml` in the same folder as the .exe and you can manually edit the XML file to add new profiles. In order to remove profiles you can edit the `SetResolution.xml` file.
+Profiles are stored in `SetResolution.xml` in the same folder as the .exe, so you can manually edit the XML file to add or edit profiles. In order to remove profiles you have to edit the `SetResolution.xml` file.
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -194,7 +197,7 @@ Profiles are stored in `SetResolution.xml` in the same folder as the .exe and yo
 </AppConfiguration>
 ```
 
-> Yeah I know XML. But to keep out any external dependencies, XML serialization is used here :smile:
+> Yeah I know XML. But to keep the EXE as single file and to avoid dependencies, XML serialization is used. :smile:
 
 ### Setting a Profile
 Once a profile has been created you can invoke it.
@@ -233,17 +236,17 @@ If you accidentally set your monitor into a display mode that isn't supported or
 
 To reset a non-working display setting you have to **boot into Windows Safe Mode** and select another display mode, then reboot. 
 
-Note: It's difficult to select an invalid display mode. We set the display mode only to modes that are available for the current display, so setting a non-supported resolution should in theory never happen. However, you can end up with a resolution that your driver supports but that your monitor does not. This mostly involves unsupported frequencies.
+### You're trying too hard to break it!
+Note: It's difficult to select an invalid display mode using this tool. First we prompt for confirmation of the new display mode and if not confirmed it reverts back to the previous setting after 5 seconds. Secondly the display mode has to match a display mode that the driver makes available, so setting a completely non-supported resolution should in theory never happen.However, you can end up with a resolution that your driver supports, but that your monitor does not.
 
 > Moral of the Story: Pick a display mode that you know works using common, widely used resolutions. If not sure try the settings in the Windows Resolution box first.
 
 ## Credits
-Most of the hard work of this tool is in the Win32 interfaces to retrieve and set display settings. All of that code is based on this excellent article on C# Corner by [Mohammad Elseheimy](https://www.c-sharpcorner.com/members/mohammad-elsheimy):
+The initial code that manages retrieving and setting display modes is based on this excellent article on C# Corner by [Mohammad Elseheimy](https://www.c-sharpcorner.com/members/mohammad-elsheimy):
 
 * [Changing Display Settings Programmatically
 ](https://www.c-sharpcorner.com/uploadfile/GemingLeader/changing-display-settings-programmatically/)
 
 ## To do
 
-* Add support for configuration of non-default monitor(S)
-
+nothing
