@@ -144,12 +144,20 @@ namespace Westwind.SetResolution
                 return;
             }
 
-            DisplayManager.SetDisplaySettings(set, monitor.DriverDeviceName);
-            ColorConsole.WriteSuccess("Switched Display Mode to " + set.ToString());
+            try
+            {
+                DisplayManager.SetDisplaySettings(set, monitor.DriverDeviceName);
+                ColorConsole.WriteEmbeddedColorLine($"Switched Display Mode on Monitor [green]{monitor.DisplayName}[/green] to:\n[green]{set.ToString()}[/green]");
+            }
+            catch(Exception ex)
+            {
+                ColorConsole.WriteError("Unable to set Display Mode to " + set.ToString() + "\nError: " + ex.Message);
+                return;
+            }
 
             if (!CommandLine.NoPrompt)
             {
-                ColorConsole.WriteLine("\npress any key to confirm new resolution within 5 seconds: ");
+                ColorConsole.WriteLine("\npress any key to confirm new resolution within 5 seconds.",ConsoleColor.Yellow);
                 bool keyPressed = false;
                 for (int i = 0; i < 55; i++)
                 {
@@ -188,13 +196,6 @@ namespace Westwind.SetResolution
             var displayModes = DisplayManager.GetAllDisplaySettings(monitor.DriverDeviceName);
             var current = DisplayManager.GetCurrentDisplaySetting(monitor.DriverDeviceName);
 
-            //string text = $"Current Monitor and Display Mode";
-            //ColorConsole.WriteLine(text, ConsoleColor.Yellow);
-            //ColorConsole.WriteLine( new string('-',  text.Length), ConsoleColor.Yellow);
-            //Console.WriteLine($"{monitor.Index} {monitor.DisplayName}");
-            //Console.WriteLine(current + "\n");
-
-
             ColorConsole.WriteLine("Available Monitors", ConsoleColor.Yellow);
             ColorConsole.WriteLine("------------------", ConsoleColor.Yellow);
             foreach (var device in devices)
@@ -206,11 +207,8 @@ namespace Westwind.SetResolution
             }
             Console.WriteLine();
 
-            text = $"Available Display Modes";
-            ColorConsole.WriteLine(text, ConsoleColor.Yellow);
-            ColorConsole.WriteLine( new string('-',text.Length), ConsoleColor.Yellow);
-
-            IEnumerable<DisplaySettings> filtered = displayModes;
+            
+            IList<DisplaySettings> filtered = displayModes;
             if (!CommandLine.ListAll)
             {
                 filtered = displayModes.Where(d =>
@@ -220,15 +218,25 @@ namespace Westwind.SetResolution
                     .OrderByDescending(d=> d.Width)
                     // unique
                     .GroupBy(d => new {d.Width, d.Height, d.Frequency, d.Orientation})
-                    .Select(g => g.First());
+                    .Select(g => g.First())
+                    .ToList();
             }
+            else
+            {
+                filtered = filtered.OrderByDescending(d => d.Width).ToList();
+            }
+
+            text = $"Available Display Modes ({filtered.Count})" ;
+            ColorConsole.WriteLine(text, ConsoleColor.Yellow);
+            ColorConsole.WriteLine(new string('-', text.Length), ConsoleColor.Yellow);
+
 
             foreach (var set in filtered)
             {
                 if (set.Equals(current))
-                    ColorConsole.WriteLine(set.ToString() + " *", ConsoleColor.Green);
+                    ColorConsole.WriteLine(set.ToString(!CommandLine.ListAll) + " *", ConsoleColor.Green);
                 else
-                    Console.WriteLine(set.ToString());
+                    Console.WriteLine(set.ToString(!CommandLine.ListAll));
             }
         }
 

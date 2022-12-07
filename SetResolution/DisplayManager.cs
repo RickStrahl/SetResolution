@@ -264,11 +264,30 @@ namespace Westwind.SetResolution
         public int BitCount { get; set; }
         public int Frequency { get; set; }
 
+        /// <summary>
+        /// Display Mode string display with full detail
+        /// </summary>
         public override string ToString()
         {
-            return string.Format(System.Globalization.CultureInfo.CurrentCulture,
-                $"{Width} x {Height}, {BitCount} Bit, {Frequency} Hertz, {Orientation}");
+            return ToString(false);
         }
+
+        /// <summary>
+        /// Display Mode string display
+        /// </summary>
+        /// <param name="noDetails">only return height and width</param>
+        /// <returns></returns>
+        public string ToString(bool noDetails)
+        {
+            if (noDetails)
+            {
+                return string.Format(System.Globalization.CultureInfo.CurrentCulture, $"{Width} x {Height}");
+            }
+
+            return string.Format(System.Globalization.CultureInfo.CurrentCulture,
+                $"{Width} x {Height}, {Frequency}hz, {BitCount}bit{(Orientation != Orientation.Default ? ", " + Orientation.ToString() : "")}");
+        }
+
 
         public override bool Equals(object d)
         {
