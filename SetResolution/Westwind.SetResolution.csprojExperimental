@@ -1,10 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <!-- 
-      Pass in via dotnet build /p:DefineConstants="BUILD_DOTNET_TOOL"
-      <DefineConstants>BUILD_DOTNET_TOOL</DefineConstants> 
-    -->
+    <TargetFrameworks>net6.0;net472</TargetFrameworks>
     <OutputType>Exe</OutputType>
     <Version>0.1.4</Version>
     <AssemblyName>SetResolution</AssemblyName>
@@ -23,14 +20,10 @@
     </Description>
     <Authors>Rick Strahl, West Wind Technologies</Authors>
     <Copyright>West Wind Technologies, 2022-2023</Copyright>
-
-    <PackageLicense>LICENSE.MD</PackageLicense>
   </PropertyGroup>
 
 
   <ItemGroup>
-    <None Include="LICENSE.MD" Pack="true" PackagePath="" />
-  
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -42,18 +35,8 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-
-
-  <!-- Dotnet Tool Specific settings -->
-  <PropertyGroup Condition="$(DefineConstants.Contains('BUILD_DOTNET_TOOL')) == false">
-    <!-- build for .NET Framework so there are no dependencies -->
-    <TargetFramework>net472</TargetFramework>
-  </PropertyGroup>
-  
-  <PropertyGroup Condition="$(DefineConstants.Contains('BUILD_DOTNET_TOOL'))">
+  <PropertyGroup Condition="'$(TargetFramework)' != 'net472'">
     <!-- dotnet tools must build to .NET Core -->
-    <TargetFramework>net6.0</TargetFramework>
-    
     <PackAsTool>true</PackAsTool>
     <PackageId>setresolution</PackageId>
     <ToolCommandName>setresolution</ToolCommandName>
