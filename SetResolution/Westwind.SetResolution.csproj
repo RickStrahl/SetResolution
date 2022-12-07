@@ -6,7 +6,7 @@
       <DefineConstants>BUILD_DOTNET_TOOL</DefineConstants> 
     -->
     <OutputType>Exe</OutputType>
-    <Version>0.1.3</Version>
+    <Version>0.1.4</Version>
     <AssemblyName>SetResolution</AssemblyName>
     <Namespace>Westwind.SetResolution</Namespace>
     <ProductName>Set Windows Display Resolution</ProductName>

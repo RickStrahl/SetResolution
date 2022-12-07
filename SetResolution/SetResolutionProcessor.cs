@@ -164,6 +164,7 @@ namespace Westwind.SetResolution
                     Thread.Sleep(100);
                     if (Console.KeyAvailable)
                     {
+                        Console.ReadKey(true);
                         keyPressed = true;
                         break;
                     }

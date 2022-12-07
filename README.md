@@ -12,7 +12,7 @@ This small command line utility allows you to quickly set Windows Display Resolu
 
 > **Use at your own risk.** Setting an invalid display mode can [leave your screen inaccessible](#fark-i-set-a-resolution-that-doesnt-work-now-what). Use only with supported display modes. 
 >
-> For safety we ask for a key press to accept, after changing mode by default. You can override prompt requirement with `-noprompt`.
+> For safety we ask for a key press to accept, after changing mode by default. You can override the prompt with `-noprompt`.
   
 ## Basic Usage
 Most common usage is via a pre-defined profile name:
