@@ -1,6 +1,6 @@
-# Set Windows Display Resolution from Command Line
+# SetResolution: Set Windows Display Resolution from the Command Line
 
-This small command line utility allows you to quickly set Windows Display Resolutions to any of the available display modes available for your active Monitors or virtual display devices. It allows you to:
+This small command line utility allows you to quickly set Windows Display Resolutions to any of the available display modes available for your active Monitors or virtual display devices. 
 
 * Set an explicit Display Resolution
 * Create and use Display Mode Profiles for quick access
@@ -10,12 +10,8 @@ This small command line utility allows you to quickly set Windows Display Resolu
 
 ![](Assets/SetResolutionMain.png)
 
-> **Use at your own risk.** Setting an invalid display mode can [leave your screen inaccessible](#fark-i-set-a-resolution-that-doesnt-work-now-what). Use only with supported display modes. 
->
-> For safety we ask for a key press to accept, after changing mode by default. You can override the prompt with `-noprompt`.
-  
 ## Basic Usage
-Most common usage is via a pre-defined profile name:
+Most common usage is via a **pre-defined profile name**:
 
 ```powershell
 # Set to a profile named 1080 on default monitor
@@ -54,7 +50,11 @@ sr LIST -m1 -la
 To create a new profile:
 
 ```powershell
+# Create a new profile
 sr CREATEPROFILE -w 2560 -h 1600 -f 60 -b 32 -o 0 
+
+# List all profiles with their settings
+sr PROFILES
 ```
 
 ## Installation
@@ -244,8 +244,7 @@ Note: It's difficult to select an invalid display mode using this tool. First we
 ## Credits
 The initial code that manages retrieving and setting display modes is based on this excellent article on C# Corner by [Mohammad Elseheimy](https://www.c-sharpcorner.com/members/mohammad-elsheimy):
 
-* [Changing Display Settings Programmatically
-](https://www.c-sharpcorner.com/uploadfile/GemingLeader/changing-display-settings-programmatically/)
+* [Changing Display Settings Programmatically](https://www.c-sharpcorner.com/uploadfile/GemingLeader/changing-display-settings-programmatically/)
 
 ## To do
 
