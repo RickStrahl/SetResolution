@@ -232,14 +232,17 @@ Profiles are stored on disk in `SetResolution.xml` in the same folder as the `.e
 
 
 ## Fark: I set a Resolution that doesn't work. Now what?
-If you accidentally set your monitor into a display mode that isn't supported or just doesn't work with your monitor, it's possible that your screen becomes inaccessible. Because this tool switches the default display settings, once a wrong setting is made the screen simply will be blank and it's not just a simple matter of rebooting as the setting is applied to the Windows settings and persists on a reboot.
+While it's really, really difficult to do this, if you somehow managed to accidentally set your monitor into a display mode that isn't supported or just doesn't work with your monitor, it's possible that your screen becomes inaccessible. Because this tool switches the default display settings, once a wrong setting is made the screen simply will be blank and it's not just a simple matter of rebooting as the setting is applied to the Windows settings and persists on a reboot.
 
 To reset a non-working display setting you have to **boot into Windows Safe Mode** and select another display mode, then reboot. 
 
-### You're trying too hard to break it!
-Note: It's difficult to select an invalid display mode using this tool. First we prompt for confirmation of the new display mode and if not confirmed it reverts back to the previous setting after 5 seconds. Secondly the display mode has to match a display mode that the driver makes available, so setting a completely non-supported resolution should in theory never happen.However, you can end up with a resolution that your driver supports, but that your monitor does not.
+As mentioned it should be really difficult to get the monitor/driver into a non-working state because we:
 
-> Moral of the Story: Pick a display mode that you know works using common, widely used resolutions. If not sure try the settings in the Windows Resolution box first.
+* **Check settings for valid display resolutions**  
+You can't set a resolution that is not supported by the driver/monitor combo at the time of setting the mode. The only way you can get an invalid resolution is if the driver supports a mode, but for some reason the monitor does not. The list SetResolution retrieves for display modes is filtered by Windows to match driver/monitor combos that are expected to work.
+
+* **Prompt for Confirmation of Mode Change**  
+We prompt for confirmation after the resolution change and if you don't confirm in 5 seconds the display reverts to the previous mode. This ensures if your screen for some reason goes blank, you will revert back to your last working configuration. While I'm not a fan of confirmation prompts, in this case it's both prudent, and only slightly intrusive as you can simply press a key after submitting the shell command. If it really bugs you you can also run with `-noprompt` which skips the prompt (*not recommended though*).
 
 ## Credits
 The initial code that manages retrieving and setting display modes is based on this excellent article on C# Corner by [Mohammad Elseheimy](https://www.c-sharpcorner.com/members/mohammad-elsheimy):
