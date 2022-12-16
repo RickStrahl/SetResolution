@@ -1,4 +1,19 @@
-﻿using System;
+﻿/*
+ * Based on original code from:
+ *
+ * (c) Mohammad Elsheimy
+ * Changing Display Settings Programmatically
+ *
+ * https://www.c-sharpcorner.com/uploadfile/GemingLeader/changing-display-settings-programmatically/
+ *
+ * Added support for:
+ *
+ * * Listing Monitors and Monitor specific display modes
+ * * Set display mode for a specific monitor/driver
+ *
+*/
+
+using System;
 using System.Runtime.InteropServices;
 
 namespace Westwind.SetResolution
@@ -6,21 +21,6 @@ namespace Westwind.SetResolution
     static class DisplayManagerNative
     {
         #region Enum Display Settings
-
-        public static byte[] ToLPTStr(string str)
-        {
-            if (str == null) return null;
-
-            var lptArray = new byte[str.Length + 1];
-
-            var index = 0;
-            foreach (char c in str.ToCharArray())
-                lptArray[index++] = Convert.ToByte(c);
-
-            lptArray[index] = Convert.ToByte('\0');
-
-            return lptArray;
-        }
 
         [DllImport("User32.dll", SetLastError = true, BestFitMapping = false, ThrowOnUnmappableChar = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
@@ -255,6 +255,27 @@ namespace Westwind.SetResolution
         public const uint FORMAT_MESSAGE_IGNORE_INSERTS = 0x200;
         public const uint FORMAT_MESSAGE_FROM_SYSTEM = 0x1000;
         public const uint FORMAT_MESSAGE_FLAGS = FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_IGNORE_INSERTS | FORMAT_MESSAGE_FROM_SYSTEM;
+
+        #endregion
+
+        #region Helpers
+
+        public static byte[] ToLPTStr(string str)
+        {
+            if (str == null) return null;
+
+            var lptArray = new byte[str.Length + 1];
+
+            var index = 0;
+            foreach (char c in str.ToCharArray())
+                lptArray[index++] = Convert.ToByte(c);
+
+            lptArray[index] = Convert.ToByte('\0');
+
+            return lptArray;
+        }
+
+        #endregion
     }
-    #endregion
+
 }

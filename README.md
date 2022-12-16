@@ -92,7 +92,7 @@ The help information is as follows:
 ## Multi-Monitor Support
 This tool supports multiple monitors via the `-m <MonitorNumber>` command line switch. By default the **Main Windows Monitor** monitor is used which corresponds to the **Main Monitor** setting configured in the Windows Display settings.
 
-Both the `SET` and `LIST` command support the `-m` switch to specify the monitor that the command applies to. Profile operations do not specify a monitor.
+Both the `SET`, `PROFILE` and `LIST` commands support the `-m` switch to specify the monitor that the command applies to. Creating a new profile does not specify a monitor.
 
 The `-m` switch uses a numbering scheme from 1-n, with monitor numbers identified in the `LIST` command. The numbers also reflect the same value you see in the Windows Display Settings dialog.
 
@@ -155,7 +155,7 @@ You can create a profile with:
 SetResolution CREATEPROFILE -p <profileName> -w 1280 -h 768 -f 59
 ```
 #### Manually Edit SetResolution.xml
-Profiles are stored in `SetResolution.xml` in the same folder as the .exe, so you can manually edit the XML file to add or edit profiles. In order to remove profiles you have to edit the `SetResolution.xml` file.
+Profiles are stored in `SetResolution.xml` in the same folder as the .exe, so you can manually edit the XML file to add or edit profiles. In order to remove profiles you have to edit the `SetResolution.xml` file and remove the entry.
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -197,7 +197,14 @@ Profiles are stored in `SetResolution.xml` in the same folder as the .exe, so yo
 </AppConfiguration>
 ```
 
-> Yeah I know XML. But to keep the EXE as single file and to avoid dependencies, XML serialization is used. :smile:
+> #### XML? Really?
+> Yeah I know XML - but to keep the EXE as a fully self-contained, single EXE file and avoid external dependencies, XML serialization is used since it's built into the core framework runtime.
+
+> #### Write Permissions required for Profile File
+> In order to save a new profile using `CREATEPROFILE` you have to have **Write Permissions in the same folder `SetResolution.exe` or `sr.exe`**. This means that preferrably you'll install this tool into a location that supports writing files. 
+> 
+> Alternately you can manually edit the file, or give the file itself full read/write access.
+
 
 ### Setting a Profile
 Once a profile has been created you can invoke it.

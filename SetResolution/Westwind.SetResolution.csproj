@@ -6,7 +6,7 @@
       <DefineConstants>BUILD_DOTNET_TOOL</DefineConstants> 
     -->
     <OutputType>Exe</OutputType>
-    <Version>0.1.4</Version>
+    <Version>0.1.5</Version>
     <AssemblyName>SetResolution</AssemblyName>
     <Namespace>Westwind.SetResolution</Namespace>
     <ProductName>Set Windows Display Resolution</ProductName>
@@ -14,12 +14,13 @@
     <Description>
       Allows you set Windows display Resolution from the Terminal via simple commands. 
       
-      Using this tool you can:
+      This tool lets you:
 
       * Set a specific resolution, frequency, bitness and rotation
       * List all available display modes
-      * Create and use profiles for easy access
-      * Supports multiple Monitors
+      * Create and use profiles for quick mode switches
+      * Support multiple Monitors
+      * Prompts for confirmation to avoid possibly invalid display modes
     </Description>
     <Authors>Rick Strahl, West Wind Technologies</Authors>
     <Copyright>West Wind Technologies, 2022-2023</Copyright>
@@ -27,10 +28,8 @@
     <PackageLicense>LICENSE.MD</PackageLicense>
   </PropertyGroup>
 
-
   <ItemGroup>
     <None Include="LICENSE.MD" Pack="true" PackagePath="" />
-  
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
