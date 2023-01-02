@@ -213,7 +213,7 @@ namespace Westwind.SetResolution
             if (!CommandLine.ListAll)
             {
                 filtered = displayModes.Where(d =>
-                        d.Width >= 800 &&
+                        d.Width >= AppConfiguration.Current.MinResolutionWidth &&
                         d.Frequency == current.Frequency &&
                         d.Orientation == current.Orientation)
                     .OrderByDescending(d=> d.Width)

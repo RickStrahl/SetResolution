@@ -41,9 +41,10 @@ To see available resolutions for a specific monitor:
 
 ```powershell
 # default list is filtered to current frequency/bitrate/orientation
+# and the `MinResolutionWidth` configuration setting
 sr LIST -m1
 
-# all resolutions
+# list ALL resolutions/modes
 sr LIST -m1 -la
 ```
 
@@ -159,7 +160,7 @@ Profiles are stored in `SetResolution.xml` in the same folder as the .exe, so yo
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
-<AppConfiguration xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SetResolution xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
    <Profiles>
       <DisplayProfile>
          <Name>1080</Name>
@@ -194,7 +195,8 @@ Profiles are stored in `SetResolution.xml` in the same folder as the .exe, so yo
          <Orientation>Default</Orientation>
       </DisplayProfile>
    </Profiles>
-</AppConfiguration>
+   <MinResolution>1280</MinResolution>
+</SetResolution>
 ```
 
 > #### XML? Really?
@@ -214,9 +216,8 @@ Once a profile has been created you can invoke it.
 SetResolution <profileName> -m2
 
 # Full syntax - on main monitor (not specified)
-SetResolution SET -p <profileName> 
+SetResolution SET -p <profileName> -m1
 ```
-
 
 ### Default Profiles
 A number of default profiles are added for common 16:9 resolutions @ 60hz which is most common:

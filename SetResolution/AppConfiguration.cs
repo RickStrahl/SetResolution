@@ -1,16 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Xml.Serialization;
 using Westwind.Utilities;
 
 namespace Westwind.SetResolution
 {
+    [XmlRoot(ElementName = "SetResolution")]
     public class AppConfiguration
     {
         public static AppConfiguration Current { get; set; }
-        
+
+        /// <summary>
+        /// Display Profiles
+        /// </summary>
         public List<DisplayProfile> Profiles { get; set; }  = new List<DisplayProfile>();
 
+        /// <summary>
+        /// Minimum Resolution 
+        /// </summary>
+        public int MinResolutionWidth { get; set; } = 1024;
 
         public static void Load()
         {
