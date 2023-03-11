@@ -16,7 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-
+using static Westwind.SetResolution.DisplayManagerNative;
 
 namespace Westwind.SetResolution
 {
@@ -49,7 +49,8 @@ namespace Westwind.SetResolution
             mode.dmDisplayOrientation = (uint)set.Orientation;
             mode.dmBitsPerPel = (uint)set.BitCount;
             mode.dmDisplayFrequency = (uint)set.Frequency;
-           
+            mode.dmFields = DmFlags.DM_PELSWIDTH | DmFlags.DM_PELSHEIGHT;
+
             DisplayChangeResult result = (DisplayChangeResult)DisplayManagerNative.ChangeDisplaySettingsEx(deviceName, ref mode, IntPtr.Zero,  0, IntPtr.Zero);
             
             string msg = null;

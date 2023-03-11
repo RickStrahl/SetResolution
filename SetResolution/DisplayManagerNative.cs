@@ -40,6 +40,41 @@ namespace Westwind.SetResolution
         public const int DMDO_180 = 2;
         public const int DMDO_270 = 3;
 
+        [Flags()]
+        public enum DmFlags : int
+        {
+            DM_ORIENTATION = 0x00000001,
+            DM_PAPERSIZE = 0x00000002,
+            DM_PAPERLENGTH = 0x00000004,
+            DM_PAPERWIDTH = 0x00000008,
+            DM_SCALE = 0x00000010,
+            DM_POSITION = 0x00000020,
+            DM_NUP = 0x00000040,
+            DM_DISPLAYORIENTATION = 0x00000080,
+            DM_COPIES = 0x00000100,
+            DM_DEFAULTSOURCE = 0x00000200,
+            DM_PRINTQUALITY = 0x00000400,
+            DM_COLOR = 0x00000800,
+            DM_DUPLEX = 0x00001000,
+            DM_YRESOLUTION = 0x00002000,
+            DM_TTOPTION = 0x00004000,
+            DM_COLLATE = 0x00008000,
+            DM_FORMNAME = 0x00010000,
+            DM_LOGPIXELS = 0x00020000,
+            DM_BITSPERPEL = 0x00040000,
+            DM_PELSWIDTH = 0x00080000,
+            DM_PELSHEIGHT = 0x00100000,
+            DM_DISPLAYFLAGS = 0x00200000,
+            DM_DISPLAYFREQUENCY = 0x00400000,
+            DM_ICMMETHOD = 0x00800000,
+            DM_ICMINTENT = 0x01000000,
+            DM_MEDIATYPE = 0x02000000,
+            DM_DITHERTYPE = 0x04000000,
+            DM_PANNINGWIDTH = 0x08000000,
+            DM_PANNINGHEIGHT = 0x10000000,
+            DM_DISPLAYFIXEDOUTPUT = 0x20000000
+        }
+
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public struct DEVMODE
         {
@@ -68,7 +103,7 @@ namespace Westwind.SetResolution
             public ushort dmDriverExtra;
 
             [MarshalAs(UnmanagedType.U4)]
-            public uint dmFields;
+            public DmFlags dmFields;
 
             public POINTL dmPosition;
 
