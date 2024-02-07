@@ -12,5 +12,8 @@ copy .\bin\Release\net472\SetResolution.exe ..\Binaries
 copy ..\binaries\SetResolution.exe ..\binaries\sr.exe
 
 # My Utilities folder
-copy ..\binaries\SetResolution.exe ~\DropBox\utl\SetResolution.exe
-copy ..\binaries\SetResolution.exe ~\DropBox\utl\sr.exe
+if (Test-Path ~\DropBox\utl) {
+    copy ..\binaries\SetResolution.exe ~\DropBox\utl\SetResolution.exe
+    copy ..\binaries\SetResolution.exe ~\DropBox\utl\sr.exe
+}
+

@@ -7,6 +7,8 @@ This small command line utility allows you to quickly set Windows Display Resolu
 * List all available Display Modes and Monitors
 * Supports multiple Monitors
 * Prompts for confirmation by default to avoid invalid display modes
+* Runs as standalone, single file Windows EXE
+* Can install and run as `dotnet tool` <small>*(>=v0.2 (.NET 8.0), <v0.2 (.NET 6.0))*</small>
 
 ![](Assets/SetResolutionMain.png)
 
