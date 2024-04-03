@@ -6,7 +6,7 @@
       <DefineConstants>BUILD_DOTNET_TOOL</DefineConstants> 
     -->
     <OutputType>Exe</OutputType>
-    <Version>0.2.0</Version>
+    <Version>0.2.1</Version>
     <AssemblyName>SetResolution</AssemblyName>
     <Namespace>Westwind.SetResolution</Namespace>
     <ProductName>Set Windows Display Resolution</ProductName>
@@ -25,11 +25,16 @@
     <Authors>Rick Strahl, West Wind Technologies</Authors>
     <Copyright>West Wind Technologies, 2022-2024</Copyright>
 
-    <PackageLicense>LICENSE.MD</PackageLicense>
+    
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageLicenseFile>LICENSE.MD</PackageLicenseFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="LICENSE.MD" Pack="true" PackagePath="" />
+    <None Include="../LICENSE.MD" Pack="true" PackagePath="" />
+    <None Include="../icon.png" Pack="true" PackagePath="" />
+    <None Include="../README.md" Pack="true" PackagePath="" />
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -40,6 +45,10 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="nupkg\" />
   </ItemGroup>
 
 
