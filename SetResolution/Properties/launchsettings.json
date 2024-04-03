@@ -1,8 +1,16 @@
 {
   "profiles": {
-    "SetResolution": {
+    "SetResolution list": {
       "commandName": "Project",
       "commandLineArgs": "LIST"
+    },
+    "SetResolution Set": {
+      "commandName": "Project",
+      "commandLineArgs": "SET -h 1080 -w 1920 -o 0 -f 60"
+    },
+    "SetResolution 4k": {
+      "commandName": "Project",
+      "commandLineArgs": "4k"
     }
   }
 }

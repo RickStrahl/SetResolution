@@ -1,5 +1,10 @@
 # SetResolution: Set Windows Display Resolution from the Command Line
 
+[![](https://img.shields.io/nuget/v/Westwind.Wpf.Statusbar.svg)](https://www.nuget.org/packages/Westwind.Wpf.Statusbar/)
+ ![](https://img.shields.io/nuget/dt/Westwind.Wpf.Statusbar.svg)
+
+![](https://raw.githubusercontent.com/RickStrahl/SetResolution/master/icon-256.png)
+
 This small command line utility allows you to quickly set Windows Display Resolutions to any of the available display modes available for your active Monitors or virtual display devices. 
 
 * Set an explicit Display Resolution
@@ -10,7 +15,7 @@ This small command line utility allows you to quickly set Windows Display Resolu
 * Runs as standalone, single file Windows EXE
 * Can install and run as `dotnet tool` <small>*(>=v0.2 (.NET 8.0), <v0.2 (.NET 6.0))*</small>
 
-![](Assets/SetResolutionMain.png)
+![](https://raw.githubusercontent.com/RickStrahl/SetResolution/master/Assets/SetResolutionMain.png)
 
 ## Basic Usage
 Most common usage is via a **pre-defined profile name**:
@@ -258,6 +263,8 @@ We prompt for confirmation after the resolution change and if you don't confirm 
 The initial code that manages retrieving and setting display modes is based on this excellent article on C# Corner by [Mohammad Elseheimy](https://www.c-sharpcorner.com/members/mohammad-elsheimy):
 
 * [Changing Display Settings Programmatically](https://www.c-sharpcorner.com/uploadfile/GemingLeader/changing-display-settings-programmatically/)
+
+This derivative tool adds an easy to use Console front-end and provides for multi-monitor support. **Most of the credit for this tool goes to Mohammad's work!**
 
 ## To do
 
