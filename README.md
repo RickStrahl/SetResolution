@@ -1,7 +1,7 @@
 # SetResolution: Set Windows Display Resolution from the Command Line
 
-[![](https://img.shields.io/nuget/v/Westwind.Wpf.Statusbar.svg)](https://www.nuget.org/packages/Westwind.Wpf.Statusbar/)
- ![](https://img.shields.io/nuget/dt/Westwind.Wpf.Statusbar.svg)
+[![](https://img.shields.io/nuget/v/SetResolution.svg)](https://www.nuget.org/packages/SetResolution/)
+[![](https://img.shields.io/nuget/dt/SetResolution.svg)](https://www.nuget.org/packages/SetResolution/)
 
 ![](https://raw.githubusercontent.com/RickStrahl/SetResolution/master/icon-256.png)
 
@@ -95,7 +95,7 @@ dotnet tool update -g SetResolution
 To show available syntax, run `SetResolution.exe` or `sr.exe` without any parameters or `/?` or `HELP`. 
 The help information is as follows:
 
-![](Assets/HelpScreen.png)
+![](https://github.com/RickStrahl/SetResolution/raw/master/Assets/HelpScreen.png)
 
 ## Multi-Monitor Support
 This tool supports multiple monitors via the `-m <MonitorNumber>` command line switch. By default the **Main Windows Monitor** monitor is used which corresponds to the **Main Monitor** setting configured in the Windows Display settings.
@@ -111,7 +111,7 @@ If you don't specify the `-m` switch which selects a monitor, the **Windows Main
 
 The selected monitor and display mode are highlighted in the list (green and *).
 
-![](Assets/ListDisplay.png)
+![](https://github.com/RickStrahl/SetResolution/raw/master/Assets/ListDisplay.png)
 
 ```powershell
 sr LIST -m1
@@ -249,7 +249,7 @@ Profiles are stored on disk in `SetResolution.xml` in the same folder as the `.e
 ## Fark: I set a Resolution that doesn't work. Now what?
 While it's really, really difficult to do this, if you somehow managed to accidentally set your monitor into a display mode that isn't supported or just doesn't work with your monitor, it's possible that your screen becomes inaccessible. Because this tool switches the default display settings, once a wrong setting is made the screen simply will be blank and it's not just a simple matter of rebooting as the setting is applied to the Windows settings and persists on a reboot.
 
-To reset a non-working display setting you have to **boot into Windows Safe Mode** and select another display mode, then reboot. 
+> To reset a non-working display setting you have to **boot into Windows Safe Mode** and select another display mode, then reboot. 
 
 As mentioned it should be really difficult to get the monitor/driver into a non-working state because we:
 
