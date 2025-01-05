@@ -49,7 +49,7 @@ namespace Westwind.SetResolution
             mode.dmDisplayOrientation = (uint)set.Orientation;
             mode.dmBitsPerPel = (uint)set.BitCount;
             mode.dmDisplayFrequency = (uint)set.Frequency;
-            mode.dmFields = DmFlags.DM_PELSWIDTH | DmFlags.DM_PELSHEIGHT;
+            mode.dmFields = DmFlags.DM_PELSWIDTH | DmFlags.DM_PELSHEIGHT | DmFlags.DM_DISPLAYFREQUENCY | DmFlags.DM_BITSPERPEL; 
 
 
             uint CDS_UPDATEREGISTRY = set.NoPersist ? 0u : 1;   // force to persist settings in registry

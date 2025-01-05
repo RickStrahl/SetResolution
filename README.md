@@ -258,6 +258,16 @@ You can't set a resolution that is not supported by the driver/monitor combo at 
 * **Prompt for Confirmation of Mode Change**  
 We prompt for confirmation after the resolution change and if you don't confirm in 5 seconds the display reverts to the previous mode. This ensures if your screen for some reason goes blank, you will revert back to your last working configuration. While I'm not a fan of confirmation prompts, in this case it's both prudent, and only slightly intrusive as you can simply press a key after submitting the shell command. If it really bugs you you can also run with `-noprompt` which skips the prompt (*not recommended though*).
 
+## Changelog
+
+### 0.3
+
+* **Fix Persistance across Reboots by Default**  
+Resolution changes previously did not persist in the registry and so when the machine was rebooted the changed setting would not persist and the last saved setting (from Windows) would be used for resulution. Now by default the resolution - if set successfully - is saved and restored on reboot. You can use the `--nopersist` flag to not store the new settings in the registry and revert back to the previous resolution.
+
+* **Fix Setting the Frequency**  
+Frequency changes were ignored in previous versions and they should be properly applied now.
+
 ## Credits
 The initial code that manages retrieving and setting display modes is based on this excellent article on C# Corner by [Mohammad Elseheimy](https://www.c-sharpcorner.com/members/mohammad-elsheimy):
 
