@@ -94,7 +94,7 @@ dotnet tool update -g SetResolution
 To show available syntax, run `SetResolution.exe` or `sr.exe` without any parameters or `/?` or `HELP`. 
 The help information is as follows:
 
-![](https://github.com/RickStrahl/SetResolution/raw/master/Assets/HelpScreen.png)
+![Help Screen](https://github.com/RickStrahl/SetResolution/raw/master/Assets/HelpScreen.png)
 
 ## Multi-Monitor Support
 This tool supports multiple monitors via the `-m <MonitorNumber>` command line switch. By default the **Main Windows Monitor** monitor is used which corresponds to the **Main Monitor** setting configured in the Windows Display settings.
