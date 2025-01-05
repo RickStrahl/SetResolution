@@ -260,7 +260,7 @@ We prompt for confirmation after the resolution change and if you don't confirm 
 
 ## Changelog
 
-### 0.3.1
+### 0.3.2
 
 * **Fix Persistance across Reboots by Default**  
 Resolution changes previously did not persist in the registry and so when the machine was rebooted the changed setting would not persist and the last saved setting (from Windows) would be used for resulution. Now by default the resolution - if set successfully - is saved and restored on reboot. You can use the `--nopersist` flag to not store the new settings in the registry and revert back to the previous resolution.
