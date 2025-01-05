@@ -260,13 +260,16 @@ We prompt for confirmation after the resolution change and if you don't confirm 
 
 ## Changelog
 
-### 0.3
+### 0.3.1
 
 * **Fix Persistance across Reboots by Default**  
 Resolution changes previously did not persist in the registry and so when the machine was rebooted the changed setting would not persist and the last saved setting (from Windows) would be used for resulution. Now by default the resolution - if set successfully - is saved and restored on reboot. You can use the `--nopersist` flag to not store the new settings in the registry and revert back to the previous resolution.
 
 * **Fix Setting the Frequency**  
 Frequency changes were ignored in previous versions and they should be properly applied now.
+
+* **Dotnet Tool now uses the .NET 9.0 SDK**  
+We switched to the .NET 9.0 SDK for the dotnet tool operation for v0.3 which is required for this update. Older SDK versions are supported with older versions of this tool (v0.2.x .NET 8.0 SDK).
 
 ## Credits
 The initial code that manages retrieving and setting display modes is based on this excellent article on C# Corner by [Mohammad Elseheimy](https://www.c-sharpcorner.com/members/mohammad-elsheimy):
