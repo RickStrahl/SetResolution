@@ -36,6 +36,8 @@ namespace Westwind.SetResolution
         /// </summary>
         public bool NoPrompt { get; set; }
 
+        public bool NoPersist { get; set; }
+
 
         public SetResolutionCommandLineParser(string[] args = null, string cmdLine = null)
             : base(args, cmdLine)
@@ -56,7 +58,7 @@ namespace Westwind.SetResolution
             MonitorId = ParseIntParameterSwitch("-m");
 
             NoPrompt = ParseParameterSwitch("-noprompt");
-
+            NoPersist = ParseParameterSwitch("-nopersist");
             Help = ParseParameterSwitch("-h");
         }
 

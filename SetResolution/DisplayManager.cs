@@ -51,7 +51,9 @@ namespace Westwind.SetResolution
             mode.dmDisplayFrequency = (uint)set.Frequency;
             mode.dmFields = DmFlags.DM_PELSWIDTH | DmFlags.DM_PELSHEIGHT;
 
-            DisplayChangeResult result = (DisplayChangeResult)DisplayManagerNative.ChangeDisplaySettingsEx(deviceName, ref mode, IntPtr.Zero,  0, IntPtr.Zero);
+
+            uint CDS_UPDATEREGISTRY = set.NoPersist ? 0u : 1;   // force to persist settings in registry
+            DisplayChangeResult result = (DisplayChangeResult)DisplayManagerNative.ChangeDisplaySettingsEx(deviceName, ref mode, IntPtr.Zero,  CDS_UPDATEREGISTRY, IntPtr.Zero);
             
             string msg = null;
             switch (result)
@@ -264,6 +266,12 @@ namespace Westwind.SetResolution
         public Orientation Orientation { get; set; }
         public int BitCount { get; set; }
         public int Frequency { get; set; }
+
+        /// <summary>
+        /// Determines whether the settings are stored in the registry for
+        /// persistence for a reboot.
+        /// </summary>
+        public bool NoPersist { get; set; }
 
         /// <summary>
         /// Display Mode string display with full detail

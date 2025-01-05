@@ -13,7 +13,7 @@ This small command line utility allows you to quickly set Windows Display Resolu
 * Supports multiple Monitors
 * Prompts for confirmation by default to avoid invalid display modes
 * Runs as standalone, single file Windows EXE
-* Can install and run as `dotnet tool` <small>*(>=v0.2 (.NET 8.0), <v0.2 (.NET 6.0))*</small>
+* Can install and run as `dotnet tool` <small>*(>=0.3 (.NET 9.0), >v0.2 (.NET 8.0), <v0.2 (.NET 6.0))*</small>
 
 ![](https://raw.githubusercontent.com/RickStrahl/SetResolution/master/Assets/SetResolutionMain.png)
 
@@ -75,8 +75,8 @@ This tool is a small, self-contained Console EXE application. For now, you can d
 
 I recommend you copy to a folder location that is in your Windows path or add it to your path, so you can run `SetResolution` from any location.
 
-### Install as Dotnet Tool (.NET 6.0 SDK required)
-For .NET developers the easiest way to install and keep the tool up to date is via Dotnet Tool installation. This requires that the [.NET 6.0 (or later) SDK](https://dotnet.microsoft.com/en-us/download).
+### Install as Dotnet Tool (.NET 9.0 SDK required)
+For .NET developers the easiest way to install and keep the tool up to date is via Dotnet Tool installation. This requires that the [.NET 9.0 (or later) SDK](https://dotnet.microsoft.com/en-us/download).
 
 You can install, update and use it with:
 
@@ -84,7 +84,6 @@ You can install, update and use it with:
 # install
 dotnet tool install -g SetResolution
 
-# Use it
 SetResolution 1080 -m2
 
 #update

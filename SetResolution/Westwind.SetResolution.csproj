@@ -6,7 +6,7 @@
       <DefineConstants>BUILD_DOTNET_TOOL</DefineConstants> 
     -->
     <OutputType>Exe</OutputType>
-    <Version>0.2.1</Version>
+    <Version>0.3</Version>
     <AssemblyName>SetResolution</AssemblyName>
     <Namespace>Westwind.SetResolution</Namespace>
     <ProductName>Set Windows Display Resolution</ProductName>
@@ -23,7 +23,7 @@
       * Prompts for confirmation to avoid possibly invalid display modes
     </Description>
     <Authors>Rick Strahl, West Wind Technologies</Authors>
-    <Copyright>West Wind Technologies, 2022-2024</Copyright>
+    <Copyright>West Wind Technologies, 2022-2025</Copyright>
 
     
     <PackageIcon>icon.png</PackageIcon>
@@ -60,7 +60,7 @@
   
   <PropertyGroup Condition="$(DefineConstants.Contains('BUILD_DOTNET_TOOL'))">
     <!-- dotnet tools must build to .NET Core -->
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     
     <PackAsTool>true</PackAsTool>
     <PackageId>SetResolution</PackageId>

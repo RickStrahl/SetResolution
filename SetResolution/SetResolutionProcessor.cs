@@ -144,6 +144,8 @@ namespace Westwind.SetResolution
                 return;
             }
 
+            set.NoPersist = CommandLine.NoPersist;
+
             try
             {
                 DisplayManager.SetDisplaySettings(set, monitor.DriverDeviceName);

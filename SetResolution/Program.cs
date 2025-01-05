@@ -25,7 +25,7 @@ namespace Westwind.SetResolution
             string text = $"Set Resolution v{ver}";
             ColorConsole.WriteLine(text, ConsoleColor.Yellow);
             ColorConsole.WriteLine(new string('-',text.Length), ConsoleColor.Yellow);
-            ColorConsole.WriteLine("(c) West Wind Technologies, 2022-2024", ConsoleColor.DarkGray);
+            ColorConsole.WriteLine($"(c) West Wind Technologies, 2022-{DateTime.Now.Year}", ConsoleColor.DarkGray);
             
             if (args == null || args.Length == 0 || args[0] == "HELP" || args[0] == "/?")
             {
@@ -58,6 +58,7 @@ CREATEPROFILE       Creates a new profile by specifying name and display options
 -o                  Orientation - 0 (default*), 1 (90deg), 2 (180deg), 3 (270deg)
 -p                  Profile name
 -noprompt           Don't prompt for confirmation of new settings
+-nopersist          Don't persist settings across Windows reboots (default persists)
 
 [cyan]Command Modifiers[/cyan]
 -----------------
